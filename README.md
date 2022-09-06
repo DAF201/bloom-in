@@ -2,7 +2,7 @@
 
 ## What is this?
 
-my new toy to connect two pcs in two different private networks (which is basically some sort of "Implementation" of blur-in)
+my new toy to connect two pcs in two different private networks (which is basically some sort of "Implementation" of ["blur-in"](https://github.com/DAF201/blur-in))
 
 ---
 
