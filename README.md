@@ -1,5 +1,11 @@
 # bloom-in
 
+## What is this?
+
+my new toy to connect two pcs in two different private networks(which is basically some sort of "Implementation" of blur-in)
+
+---
+
 testing, not stable yet, but sort of working...
 
 ![](https://github.com/DAF201/bloom-in/blob/main/images/00EA7351-CAC0-4091-9B6F-6C1F4640A0AB.jpg)
