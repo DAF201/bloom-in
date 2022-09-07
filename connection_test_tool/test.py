@@ -3,29 +3,33 @@ import threading
 import os
 import atexit
 import json
-import re
+from time import sleep
 
-HEADER = b'bloom-in protocol V\d\.\d.\d <t>\w{0,16}<t> <i>\w{0,16}<i> BLOOM_IN$'
-COMMAND = b'bloom-in \w <t>\w{0,16}<t>(<i>\w{0,16}<i>)?<d>\w{0,65535}<d>\s?BLOOM_IN$'
-SERVER_COMMAND = b'bloom-in protocol V\d\.\d.\d <a>\w{0,16}<a> <c>\w{0,16}<c> BLOOM_IN$'
 
 with open(__file__.split(os.path.basename(__file__))[0]+'/config.json', 'r') as config:
     config_data = json.load(config)
 
-connection_header = b'bloom-in protocol V0.0.1 <t>' + \
-    config_data["token"].encode() + b'<t> <i>' + \
-    config_data["id"].encode()+b'<i> BLOOM_IN'
+HEADER = b'bloom-in protocol %s <t>%s<t> <i>%s<i> BLOOM_IN' % (config_data["protocol_version"].encode(),
+                                                               config_data["token"].encode(), config_data["id"].encode())
+
+COMMAND = b'bloom-in \w <t>\w{0,16}<t>(<i>\w{0,16}<i>)?<d>\w{0,65535}<d>\s?BLOOM_IN'
+SERVER_COMMAND = b'bloom-in protocol V\d\.\d.\d <a>\w{0,16}<a> <c>\w{0,16}<c> BLOOM_IN'
+
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(('50.17.163.77', 4215))
+s.connect((config_data["IP"], config_data["PORT"]))
 
-s.send(connection_header)
+s.send(HEADER)
 
 
 def reciving(socket: socket.socket):
     while 1:
         temp_data = socket.recv(65535)
         print(temp_data)
+
+
+def phrasing(input):
+    return input
 
 
 def sending(socket: socket.socket):
@@ -37,7 +41,7 @@ def sending(socket: socket.socket):
                 os._exit(0)
             if user_input == '':
                 continue
-            socket.send(user_input.encode())
+            socket.send(phrasing(user_input.encode()))
     except:
         pass
 
