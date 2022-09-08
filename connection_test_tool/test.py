@@ -13,7 +13,7 @@ HEADER = b'bloom-in protocol %s <t>%s<t> <i>%s<i> BLOOM_IN' % (config_data["prot
                                                                config_data["token"].encode(), config_data["id"].encode())
 
 COMMAND_BROADCAST = b'bloom-in %s <t>%s<t><d>%s<d>\s?BLOOM_IN'
-COMMAND = b'bloom-in %s <t>%s<t><i>%s<i><d>%s<d>\s?BLOOM_IN'
+COMMAND_TO = b'bloom-in %s <t>%s<t><i>%s<i><d>%s<d>\s?BLOOM_IN'
 SERVER_COMMAND = b'bloom-in protocol V\d\.\d.\d <a>%s<a> <c>%s<c> BLOOM_IN'
 
 
