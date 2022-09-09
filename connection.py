@@ -68,9 +68,11 @@ def recieve_command(socket: socket.socket, token: str):
     try:
         while True:
             data = socket.recv(1024)
+            print(data)
+            print(data == b'exit')
             if data == b'exit':
                 socket.close()
-                break
+                return
             COMMAND_POOL.append((token, data, time()))
     except:
         socket.close()
