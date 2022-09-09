@@ -65,7 +65,7 @@ struct config
 class blooming_connection
 {
     static const char *head;
-
+    static const char *exit;
     char recv_buffer[65535];
     char send_buffer[65535];
 
@@ -107,8 +107,7 @@ class blooming_connection
 
     void blooming_end()
     {
-        string buffer = "exit";
-        send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
+        send(sock, exit, strlen(exit), 0);
     }
 
 public:
@@ -132,12 +131,12 @@ public:
     }
 };
 
-const char *blooming_connection::head = "bloom-in protocol V0.0.1 <t>test<t> <i>test_machine_1<i> BLOOM_IN";
+const char *blooming_connection::head = "bloom-in protocol V0.0.1 <t>test<t> <i>tmachine1<i> BLOOM_IN";
+const char *blooming_connection::exit = "exit";
 
 int main()
 {
     config config;
     blooming_connection *sock = new blooming_connection(config);
-
     return 0;
 }

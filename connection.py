@@ -51,25 +51,24 @@ def new_connection(socket: socket.socket, flag: str):
         socket.close()
         sys.exit()
 
-    print(token, id)
+    print(id)
 
-    socket.send(b'recieved, token is: ' + token + b' id is: '+id)
+    socket.send(
+        b"Wlecome to bloom-in, current channel: "+token+b", wish you find the one blooming for you, "+id+b'\0')
 
     reciever = threading.Thread(
-        target=recieve_command, args=(socket, token.decode()))
+        target=connection_receive, args=(socket, token.decode()))
     fetcher = threading.Thread(
-        target=fetch_command, args=(socket, token.decode()))
+        target=connection_fetch, args=(socket, token.decode()))
 
     reciever.start()
     fetcher.start()
 
 
-def recieve_command(socket: socket.socket, token: str):
+def connection_receive(socket: socket.socket, token: str):
     try:
         while True:
             data = socket.recv(1024)
-            print(data)
-            print(data == b'exit')
             if data == b'exit':
                 socket.close()
                 return
@@ -79,7 +78,7 @@ def recieve_command(socket: socket.socket, token: str):
         return
 
 
-def fetch_command(socket: socket, token: str):
+def connection_fetch(socket: socket.socket, token: str):
     try:
         while True:
             for command_index in range(len(COMMAND_POOL)):
