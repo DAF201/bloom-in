@@ -111,9 +111,9 @@ class blooming_connection
 
     void blooming_end()
     {
+        send(sock, exit, strlen(exit), 0);
         closesocket(sock);
         WSACleanup();
-        send(sock, exit, strlen(exit), 0);
         std::exit(0);
     }
 
@@ -137,7 +137,7 @@ public:
     }
 };
 
-const char *blooming_connection::head = "bloom-in protocol V0.0.1 <t>test<t> <i>tmachine1<i> BLOOM_I";
+const char *blooming_connection::head = "bloom-in protocol V0.0.1 <t>test<t> <i>tmachine1<i> BLOOM_IN";
 const char *blooming_connection::exit = "exit";
 
 int main()

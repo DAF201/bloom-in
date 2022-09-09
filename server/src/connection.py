@@ -55,7 +55,7 @@ class sub_connection():
             print(TOE)
             self.__connection_close()
             return False
-
+        
         except Exception as E:
             print(E)
             self.__connection_close()
@@ -66,10 +66,12 @@ class sub_connection():
         self.socket.close()
 
     def __connection_recv(self):
-        buffer: str
+        buffer = ''
+        print('start recv')
         while True:
             buffer = self.socket.recv(65535)
             print(buffer)
 
     def __connection_send(self):
+        print('start send')
         pass
