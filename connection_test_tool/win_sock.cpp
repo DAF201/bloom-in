@@ -1,5 +1,4 @@
 #include <iostream>
-#include <regex>
 #include <thread>
 #include <winsock.h>
 #include <string>
@@ -7,7 +6,7 @@
 
 using namespace std;
 
-bool close_socket = 0;
+bool close_socket = false;
 void Send(SOCKET client, char send_buf[]);
 void Recv(SOCKET client, char recv_buf[]);
 
