@@ -1,0 +1,1 @@
+g++ .\client\src\bloom-in_client.cpp -lwsock32 -o .\bloom

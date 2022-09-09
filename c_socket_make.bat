@@ -1,1 +1,0 @@
-g++ .\connection_test_tool\win_sock.cpp -lwsock32 -o .\connection_test_tool\winsock
