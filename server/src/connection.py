@@ -1,3 +1,4 @@
+from concurrent.futures import thread
 import socket
 import threading
 import re
@@ -29,13 +30,10 @@ class sub_connection():
         if not self.__connection__init():
             sys.exit()
 
-        self.recv = threading.Thread(target=self.__connection_recv)
-        self.send = threading.Thread(target=self.__connection_send)
+        print("connected")
 
-        self.recv.start()
-        self.send.start()
-        self.recv.join()
-        self.send.join()
+        self.__connection_recv()
+        self.__connection_send()
 
     def __connection__init(self) -> bool:
         try:
@@ -55,7 +53,7 @@ class sub_connection():
             print(TOE)
             self.__connection_close()
             return False
-        
+
         except Exception as E:
             print(E)
             self.__connection_close()
@@ -66,12 +64,19 @@ class sub_connection():
         self.socket.close()
 
     def __connection_recv(self):
-        buffer = ''
         print('start recv')
-        while True:
-            buffer = self.socket.recv(65535)
-            print(buffer)
+        recv_t = threading.Thread(target=self.recv)
+        recv_t.start()
 
     def __connection_send(self):
         print('start send')
-        pass
+        send_t = threading.Thread(target=self.send)
+        send_t.start()
+
+    def recv(self):
+        while 1:
+            print(self.socket.recv(65535))
+
+    def send(self):
+        while 1:
+            pass
