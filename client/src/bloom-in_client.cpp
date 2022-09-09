@@ -59,6 +59,8 @@ struct config
                 cout << "UNKNOWN KEY-VALUE: " << buffer << " at line :" << line << endl;
             }
         }
+
+        cout << this->IP << endl;
     }
 };
 

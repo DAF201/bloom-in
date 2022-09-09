@@ -1,6 +1,6 @@
 import socket
 import threading
-import server.src.connection as connection
+import connection as connection
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
