@@ -1,3 +1,4 @@
+from pickle import NONE
 import socket
 import threading
 import re
@@ -21,7 +22,17 @@ COMMAND_POOL = []
 
 def new_connection(socket: socket.socket, flag: str):
 
-    connection_head = socket.recv(128)
+    socket.settimeout(3)
+    try:
+        connection_head = socket.recv(128)
+    except:
+        socket.send(b"timeout")
+        socket.close()
+        sys.exit()
+    finally:
+        socket.settimeout(None)
+
+    print(connection_head)
     if hashlib.sha512(connection_head).hexdigest() == config["exit_command"]:
         os._exit(0)
 
@@ -39,6 +50,8 @@ def new_connection(socket: socket.socket, flag: str):
     except:
         socket.close()
         sys.exit()
+
+    print(token, id)
 
     socket.send(b'recieved, token is: ' + token + b' id is: '+id)
 

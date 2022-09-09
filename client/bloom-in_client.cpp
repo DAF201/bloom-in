@@ -57,7 +57,7 @@ public:
 
         connect(sock, (SOCKADDR *)&socket_config, sizeof(SOCKADDR));
         blooming_start();
-        
+
         thread_recv = thread(&blooming_connection::sock_recv, this);
         thread_recv.join();
 
