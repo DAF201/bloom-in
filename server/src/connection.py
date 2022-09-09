@@ -21,11 +21,21 @@ class sub_connection():
 
         self.socket: socket.socket
         self.ip: str
+        self.recv: threading.Thread
+        self.send: threading.Thread
 
         self.socket = sock
         self.ip = addr
         if not self.__connection__init():
             sys.exit()
+
+        self.recv = threading.Thread(target=self.__connection_recv)
+        self.send = threading.Thread(target=self.__connection_send)
+
+        self.recv.start()
+        self.send.start()
+        self.recv.join()
+        self.send.join()
 
     def __connection__init(self) -> bool:
         try:
@@ -38,19 +48,28 @@ class sub_connection():
 
         except Header_Syntax_Error as HSE:
             print(HSE)
-            self.__close_connection()
+            self.__connection_close()
             return False
 
         except TimeoutError as TOE:
             print(TOE)
-            self.__close_connection()
+            self.__connection_close()
             return False
 
         except Exception as E:
             print(E)
-            self.__close_connection()
+            self.__connection_close()
             return False
 
-    def __close_connection(self):
+    def __connection_close(self):
         self.socket.send(b"close"+b'\0')
         self.socket.close()
+
+    def __connection_recv(self):
+        buffer: str
+        while True:
+            buffer = self.socket.recv(65535)
+            print(buffer)
+
+    def __connection_send(self):
+        pass
