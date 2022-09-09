@@ -9,8 +9,15 @@ from config import *
 
 
 class sub_connection():
-    def __init__(self, socket: socket.socket, addr: str) -> None:
-        self.socket = socket
+    CMD_POOL: dict
+    CMD_POOL = {}
+
+    def __init__(self, sock: socket.socket, addr: str) -> None:
+
+        self.socket: socket.socket
+        self.ip: str
+
+        self.socket = sock
         self.ip = addr
         if not self.__connection__init():
             sys.exit()
@@ -23,6 +30,9 @@ class sub_connection():
             return True
         except:
             print("time out")
-            self.socket.send(b"close"+b'\0')
-            self.socket.close()
+            self.__close_connection()
             return False
+
+    def __close_connection(self):
+        self.socket.send(b"close"+b'\0')
+        self.socket.close()
