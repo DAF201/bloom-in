@@ -77,7 +77,7 @@ class blooming_connection
     SOCKADDR_IN socket_config;
     WSADATA wsaData;
 
-    void blooming_start()
+    void blooming_init()
     {
         send(sock, head, strlen(head), 0);
     }
@@ -92,7 +92,6 @@ class blooming_connection
             if (0 == buffer.compare("exit"))
             {
                 blooming_end();
-                std::exit(0);
             }
 
             send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
@@ -102,12 +101,20 @@ class blooming_connection
     void sock_recv()
     {
         recv(sock, recv_buffer, 65535, 0);
+        if (0 == strcmp(recv_buffer, "close"))
+        {
+            cout << "remote connection closed" << endl;
+            std::exit(0);
+        }
         cout << recv_buffer << endl;
     }
 
     void blooming_end()
     {
+        closesocket(sock);
+        WSACleanup();
         send(sock, exit, strlen(exit), 0);
+        std::exit(0);
     }
 
 public:
@@ -121,13 +128,12 @@ public:
         socket_config.sin_port = htons(config.port);
 
         connect(sock, (SOCKADDR *)&socket_config, sizeof(SOCKADDR));
-        // blooming_start();
+        blooming_init();
 
         thread_recv = thread(&blooming_connection::sock_recv, this);
         thread_send = thread(&blooming_connection::sock_send, this);
         thread_recv.join();
         thread_send.join();
-        // blooming_end();
     }
 };
 
