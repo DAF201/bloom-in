@@ -8,9 +8,9 @@ from time import sleep, time
 from config import *
 
 
-class HEADER_SYNTAX_ERROR(Exception):
-    def __init__(self):
-        super().__init__("header syntax error")
+class Header_Syntax_Error(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
 
 
 class sub_connection():
@@ -21,39 +21,33 @@ class sub_connection():
 
         self.socket: socket.socket
         self.ip: str
-        self.token: str
-        self.id: str
 
         self.socket = sock
         self.ip = addr
-
         if not self.__connection__init():
             sys.exit()
 
     def __connection__init(self) -> bool:
         try:
             self.socket.settimeout(3)
-            connection_head = self.socket.recv(1024)
+            self.head = self.socket.recv(1024)
+            if re.match(HEADER, self.head) == None:
+                raise Header_Syntax_Error("invaild protocol syntax")
             self.socket.settimeout(None)
-
-            if re.match(HEADER, connection_head) == None:
-                raise HEADER_SYNTAX_ERROR
-
-            token = re.search(
-                b'bloom-in protocol V\d\.\d.\d <t>(.*)<t> <i>\w{0,16}<i> BLOOM_IN$', connection_head)
-            self.token = token.group(1) if token else None
-
-            id = re.search(
-                b'bloom-in protocol V\d\.\d.\d <t>\w{0,16}<t> <i>(.*)<i> BLOOM_IN$', connection_head)
-            self.id = id.group(1) if id else None
-
             return True
-        except HEADER_SYNTAX_ERROR:
-            print("header error")
+
+        except Header_Syntax_Error as HSE:
+            print(HSE)
             self.__close_connection()
             return False
-        except:
-            print("connection init error")
+
+        except TimeoutError as TOE:
+            print(TOE)
+            self.__close_connection()
+            return False
+
+        except Exception as E:
+            print(E)
             self.__close_connection()
             return False
 
