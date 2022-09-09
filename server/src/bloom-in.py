@@ -9,3 +9,7 @@ s.listen(2)
 
 while True:
     sock, addr = s.accept()
+    sub_connection = threading.Thread(
+        target=connection.sub_connection, args=(sock, addr))
+    sub_connection.start()
+    sub_connection.join()

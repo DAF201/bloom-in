@@ -59,8 +59,6 @@ struct config
                 cout << "UNKNOWN KEY-VALUE: " << buffer << " at line :" << line << endl;
             }
         }
-
-        cout << this->IP << endl;
     }
 };
 
@@ -94,7 +92,7 @@ class blooming_connection
             if (0 == buffer.compare("exit"))
             {
                 blooming_end();
-                return;
+                std::exit(0);
             }
 
             send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
@@ -123,7 +121,7 @@ public:
         socket_config.sin_port = htons(config.port);
 
         connect(sock, (SOCKADDR *)&socket_config, sizeof(SOCKADDR));
-        blooming_start();
+        // blooming_start();
 
         thread_recv = thread(&blooming_connection::sock_recv, this);
         thread_send = thread(&blooming_connection::sock_send, this);
