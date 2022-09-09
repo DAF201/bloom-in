@@ -74,11 +74,11 @@ void Recv(SOCKET client, char recv_buf[])
 
     // while (true)
     // {
-        if (close_socket == 1)
-        {
-            return;
-        }
-        recv(client, recv_buf, 100, 0);
-        cout << recv_buf << endl;
+    if (close_socket == 1)
+    {
+        return;
+    }
+    recv(client, recv_buf, 100, 0);
+    cout << recv_buf << endl;
     // }
 }

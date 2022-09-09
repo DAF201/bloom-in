@@ -4,8 +4,8 @@ import re
 import hashlib
 import os
 import sys
-from time import sleep
-from time import time
+from time import sleep, time
+
 config = {
     "port": 4215,
     "ip": "0.0.0.0",
