@@ -65,6 +65,8 @@ struct config
 class blooming_connection
 {
     static const char *head;
+    static const char *at_command;
+    static const char *broadcast_command;
     static const char *exit;
     char recv_buffer[65535];
     char send_buffer[65535];
@@ -138,6 +140,8 @@ public:
 };
 
 const char *blooming_connection::head = "bloom-in protocol V0.0.1 <t>test<t> <i>tmachine1<i> BLOOM_IN";
+const char *blooming_connection::at_command = "bloom-in %s <t>%s<t><i>%s<i><d>%s<d>BLOOM_IN";
+const char *blooming_connection::broadcast_command = "bloom-in %s <t>%s<t><d>%s<d>BLOOM_IN";
 const char *blooming_connection::exit = "exit";
 
 int main()

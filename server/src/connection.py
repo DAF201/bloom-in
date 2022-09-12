@@ -14,6 +14,11 @@ class Header_Syntax_Error(Exception):
         super().__init__(*args)
 
 
+class Command_Syntax_Error(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
 class sub_connection():
     CMD_POOL: dict
     CMD_POOL = {}
@@ -25,12 +30,17 @@ class sub_connection():
         self.recv: threading.Thread
         self.send: threading.Thread
 
+        self.recv_buffer: str
+
         self.socket = sock
         self.ip = addr
+
+        self.__connection_recv: function
+        self.__connection_send: function
+        self.__connection_close: function
+
         if not self.__connection__init():
             sys.exit()
-
-        print("connected")
 
         self.__connection_recv()
         self.__connection_send()
@@ -74,8 +84,16 @@ class sub_connection():
         send_t.start()
 
     def recv(self):
-        while 1:
-            print(self.socket.recv(65535))
+        try:
+            while 1:
+                self.recv_buffer = self.socket.recv(65535)
+                print(self.recv_buffer)
+                if re.match(COMMAND, self.recv_buffer) == None:
+                    raise Command_Syntax_Error("invaild protocol syntax")
+        except:
+            self.socket.send(b"invaild syntax, connection closing")
+            self.socket.close()
+            return
 
     def send(self):
         while 1:
