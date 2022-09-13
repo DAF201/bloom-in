@@ -50,6 +50,7 @@ class sub_connection():
             self.socket.settimeout(3)
             self.head = self.socket.recv(1024)
             if re.match(HEADER, self.head) == None:
+                print(self.head)
                 raise Header_Syntax_Error("invaild protocol syntax")
             self.socket.settimeout(None)
             return True

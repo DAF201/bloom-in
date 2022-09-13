@@ -65,8 +65,6 @@ struct config
 class blooming_connection
 {
     static const char *head;
-    static const char *at_command;
-    static const char *broadcast_command;
     static const char *exit;
     char recv_buffer[65535];
     char send_buffer[65535];
@@ -122,6 +120,7 @@ class blooming_connection
 public:
     blooming_connection(config config)
     {
+
         WSAStartup(MAKEWORD(2, 2), &wsaData);
         sock = socket(AF_INET, SOCK_STREAM, 0);
         memset(&socket_config, 0, sizeof(socket_config));
@@ -139,14 +138,14 @@ public:
     }
 };
 
-const char *blooming_connection::head = "bloom-in protocol V0.0.1 <t>test<t> <i>tmachine1<i> BLOOM_IN";
-const char *blooming_connection::at_command = "bloom-in %s <t>%s<t><i>%s<i><d>%s<d>BLOOM_IN";
-const char *blooming_connection::broadcast_command = "bloom-in %s <t>%s<t><d>%s<d>BLOOM_IN";
+const char *blooming_connection::head = "bloom-in protocol V0.0.1 <channel>test<channel> <id>tmachine1<id> BLOOM_IN";
 const char *blooming_connection::exit = "exit";
 
 int main()
 {
     config config;
+    cout << config.token + " " + config.id + " " + config.IP + " " + config.protocol_version << " " << config.port
+         << endl;
     blooming_connection *sock = new blooming_connection(config);
     return 0;
 }
