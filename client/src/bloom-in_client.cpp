@@ -3,7 +3,6 @@
 #include <winsock.h>
 #include <string>
 #include <fstream>
-#include <map>
 #define CONFIG_FILE "./config.config"
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
