@@ -72,6 +72,7 @@ class blooming_connection
     string exit;
 
     string local_id;
+    string channel;
 
     char recv_buffer[65535];
     char send_buffer[65535];
@@ -92,6 +93,7 @@ class blooming_connection
     void sock_send()
     {
         string buffer;
+        string command;
         while (true)
         {
             getline(cin, buffer);
@@ -102,8 +104,8 @@ class blooming_connection
                 sock_statu = 0;
                 return;
             }
-
-            send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
+            command = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id><data>" + buffer + "<data>BLOOM_IN";
+            send(sock, command.c_str(), strlen(command.c_str()), 0);
         }
     }
 
@@ -135,6 +137,7 @@ public:
     blooming_connection(config config)
     {
         local_id = config.id;
+        channel = config.token;
 
         head = "bloom-in protocol " + config.protocol_version + " <channel>" + config.token + "<channel> <id>" + config.id + "<id> BLOOM_IN";
         exit = "bloom-in exit " + config.protocol_version + " <exit><id>" + config.id + "<id><exit> BLOOM_IN";
