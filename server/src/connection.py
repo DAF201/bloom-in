@@ -1,11 +1,8 @@
-from concurrent.futures import thread
 import socket
 import threading
 import re
-import hashlib
 import os
 import sys
-from time import sleep, time
 from config import *
 
 
@@ -15,6 +12,11 @@ class Header_Syntax_Error(Exception):
 
 
 class Command_Syntax_Error(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
+class Remote_connection_closed(Exception):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
@@ -91,10 +93,13 @@ class sub_connection():
 
                 print(self.recv_buffer)
 
-                os.system("sleep 3")
+                if re.match(EXIT, self.recv_buffer) != None:
+                    raise Remote_connection_closed(
+                        "connection closed by remote")
 
                 if re.match(COMMAND, self.recv_buffer) == None:
                     raise Command_Syntax_Error("invaild protocol syntax")
+
         except:
             self.socket.send(b"invaild syntax, connection closing")
             self.socket.close()

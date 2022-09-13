@@ -8,4 +8,6 @@ HEADER = b'bloom-in protocol V\d\.\d.\d <channel>\w{0,16}<channel> <id>\w{0,16}<
 
 COMMAND = b'bloom-in \w <channel>\w{0,16}<channel>(<id>\w{0,16}<id>)?<data>\w{0,65535}<data>BLOOM_IN$'
 
+EXIT = b'bloom-in exit V\d\.\d.\d <exit><id>\w{0,16}<id><exit> BLOOM_IN$'
+
 COMMAND_POOL = []
