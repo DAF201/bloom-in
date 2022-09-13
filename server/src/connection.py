@@ -88,7 +88,11 @@ class sub_connection():
         try:
             while 1:
                 self.recv_buffer = self.socket.recv(65535)
+
                 print(self.recv_buffer)
+
+                os.system("sleep 3")
+
                 if re.match(COMMAND, self.recv_buffer) == None:
                     raise Command_Syntax_Error("invaild protocol syntax")
         except:
