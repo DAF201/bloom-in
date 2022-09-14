@@ -103,7 +103,7 @@ class blooming_connection
             {
                 blooming_end();
                 sock_statu = 0;
-                return;
+                std::exit(-1);
             }
             command = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id><data>" + buffer + "<data>BLOOM_IN";
             send(sock, command.c_str(), strlen(command.c_str()), 0);
@@ -115,12 +115,12 @@ class blooming_connection
         while (true)
         {
             recv(sock, recv_buffer, 65535, 0);
-            if (0 == strcmp(recv_buffer, "close") || sock_statu == 0 || NULL != strstr(recv_buffer, local_id.c_str()))
+            if (0 == strcmp(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || 0 == strcmp(recv_buffer, "\0"))
             {
                 blooming_end();
                 sock_statu = 0;
                 printf("connection closed\n");
-                return;
+                std::exit(-1);
             }
             printf(recv_buffer);
             printf("\n");
@@ -160,11 +160,15 @@ public:
     }
 };
 
-int main()
+int main(int argc, char **argv)
 {
     config config;
-    cout << config.token + " " + config.id + " " + config.IP + " " + config.protocol_version << " " << config.port
-         << endl;
+    if (argc > 1 && 0 == strcmp(argv[1], "--debug"))
+    {
+        cout << config.token + " " + config.id + " " + config.IP + " " + config.protocol_version << " " << config.port
+             << endl;
+    }
+
     blooming_connection *sock = new blooming_connection(config);
     return 0;
 }
