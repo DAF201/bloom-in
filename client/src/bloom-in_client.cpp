@@ -99,7 +99,7 @@ class blooming_connection
         {
             getline(cin, buffer);
 
-            if (0 == buffer.compare("exit") || sock_statu == 0)
+            if (0 == buffer.compare("exit") || 0 == sock_statu)
             {
                 blooming_end();
                 sock_statu = 0;
