@@ -3,7 +3,8 @@
 #include <winsock.h>
 #include <string>
 #include <fstream>
-#include <map>
+#include ".\libs\b64++.hpp"
+
 #define CONFIG_FILE "./config.config"
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
@@ -56,22 +57,28 @@ struct config
 
             if (!buffer.empty())
             {
-                cout << "UNKNOWN KEY-VALUE: " << buffer << " at line :" << line << endl;
+                printf("UNKNOWN KEY-VALUE: ");
+                printf(buffer.c_str());
+                printf(" at line :");
+                printf("%d", line);
+                printf("\n");
             }
         }
-
-        cout << this->IP << endl;
     }
 };
 
 class blooming_connection
 {
-    static const char *head;
-    static const char *exit;
+    string head;
+    string exit;
+
+    string local_id;
+    string channel;
+
     char recv_buffer[65535];
     char send_buffer[65535];
 
-    bool socket_status = 1;
+    bool sock_statu = 1;
 
     thread thread_recv;
     thread thread_send;
@@ -79,42 +86,63 @@ class blooming_connection
     SOCKADDR_IN socket_config;
     WSADATA wsaData;
 
-    void blooming_start()
+    void blooming_init()
     {
-        send(sock, head, strlen(head), 0);
+        send(sock, head.c_str(), strlen(head.c_str()), 0);
     }
 
     void sock_send()
     {
         string buffer;
-        while (socket_status)
+        string command;
+        while (true)
         {
             getline(cin, buffer);
 
-            if (0 == buffer.compare("exit"))
+            if (0 == buffer.compare("exit") || sock_statu == 0)
             {
                 blooming_end();
+                sock_statu = 0;
                 return;
             }
-
-            send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
+            command = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id><data>" + buffer + "<data>BLOOM_IN";
+            send(sock, command.c_str(), strlen(command.c_str()), 0);
         }
     }
 
     void sock_recv()
     {
-        recv(sock, recv_buffer, 65535, 0);
-        cout << recv_buffer << endl;
+        while (true)
+        {
+            recv(sock, recv_buffer, 65535, 0);
+            if (0 == strcmp(recv_buffer, "close") || sock_statu == 0 || NULL != strstr(recv_buffer, local_id.c_str()))
+            {
+                blooming_end();
+                sock_statu = 0;
+                printf("connection closed\n");
+                return;
+            }
+            printf(recv_buffer);
+            printf("\n");
+        }
     }
 
     void blooming_end()
     {
-        send(sock, exit, strlen(exit), 0);
+        send(sock, exit.c_str(), strlen(exit.c_str()), 0);
+        closesocket(sock);
+        WSACleanup();
     }
 
 public:
     blooming_connection(config config)
     {
+        local_id = config.id;
+        channel = config.token;
+
+        head = "bloom-in protocol " + config.protocol_version + " <channel>" + config.token + "<channel> <id>" + config.id + "<id> BLOOM_IN";
+        exit = "bloom-in exit " + config.protocol_version + " <exit><id>" + config.id + "<id><exit> BLOOM_IN";
+
         WSAStartup(MAKEWORD(2, 2), &wsaData);
         sock = socket(AF_INET, SOCK_STREAM, 0);
         memset(&socket_config, 0, sizeof(socket_config));
@@ -123,22 +151,20 @@ public:
         socket_config.sin_port = htons(config.port);
 
         connect(sock, (SOCKADDR *)&socket_config, sizeof(SOCKADDR));
-        blooming_start();
+        blooming_init();
 
         thread_recv = thread(&blooming_connection::sock_recv, this);
         thread_send = thread(&blooming_connection::sock_send, this);
         thread_recv.join();
         thread_send.join();
-        // blooming_end();
     }
 };
-
-const char *blooming_connection::head = "bloom-in protocol V0.0.1 <t>test<t> <i>tmachine1<i> BLOOM_IN";
-const char *blooming_connection::exit = "exit";
 
 int main()
 {
     config config;
+    cout << config.token + " " + config.id + " " + config.IP + " " + config.protocol_version << " " << config.port
+         << endl;
     blooming_connection *sock = new blooming_connection(config);
     return 0;
 }
