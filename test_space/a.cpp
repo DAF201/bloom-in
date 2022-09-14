@@ -21,11 +21,11 @@ std::vector<BYTE> readFile(const char *filename)
 
 int main()
 {
-    std::vector<BYTE> binary_data = readFile("test.png");
-    for (int i = 0; i < binary_data.size(); i++)
-    {
-        std::cout << binary_data[i];
-    }
+    // std::vector<BYTE> binary_data = readFile("test.png");
+    // for (int i = 0; i < binary_data.size(); i++)
+    // {
+    //     std::cout << binary_data[i];
+    // }
     // std::string b64_data = Base64::encodeFromFile("test.png");
     // std::vector<BYTE> file_data = Base64::decode(b64_data);
 

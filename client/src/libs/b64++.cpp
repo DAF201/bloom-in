@@ -1,19 +1,13 @@
 #include "b64++.hpp"
 
-vector<BYTE> read_binary_file(const char *filename)
+vector<byte_data> read_binary_file(const char *filename)
 {
     streampos fileSize;
     ifstream file(filename, ios::binary);
     file.seekg(0, ios::end);
     fileSize = file.tellg();
     file.seekg(0, ios::beg);
-    vector<BYTE> fileData(fileSize);
+    vector<byte_data> fileData(fileSize);
     file.read((char *)&fileData[0], fileSize);
     return fileData;
-}
-
-template <typename type>
-string base64_encoding(type const &source)
-{
-    cout << typeid(source).name() << endl;
 }

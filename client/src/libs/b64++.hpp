@@ -1,18 +1,19 @@
-#include "base64.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
 #include <typeinfo>
+#include <string>
 #include "base64.h"
 #include "base64_file.h"
+
 using namespace std;
 
-typedef char BYTE;
+typedef char byte_data;
 
-vector<BYTE> read_binary_file(const char *filename);
+vector<byte_data> read_binary_file(const char *filename);
 
-template <typename type>
-string base64_encoding(type const &source);
-
-template <typename type>
-string base64_decoding(type const &source);
+template <typename T>
+void test(T &source, string name)
+{
+    cout << name << " : " << typeid(source).name() << endl;
+}
