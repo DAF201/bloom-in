@@ -11,3 +11,9 @@ vector<BYTE> read_binary_file(const char *filename)
     file.read((char *)&fileData[0], fileSize);
     return fileData;
 }
+
+template <typename type>
+string base64_encoding(type const &source)
+{
+    cout << typeid(source).name() << endl;
+}
