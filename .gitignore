@@ -4,3 +4,4 @@ __pycache__/connection.cpython-310.pyc
 test.py
 client/bloom.exe
 server/pi_update.bat
+client/src/test.cpp
