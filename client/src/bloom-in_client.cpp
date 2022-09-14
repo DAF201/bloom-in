@@ -163,7 +163,7 @@ public:
 int main(int argc, char **argv)
 {
     config config;
-    if (argc > 1 && 0 == strcmp(argv[1], "--debug"))
+    if (2 == argc && (0 == strcmp(argv[1], "--debug") || 0 == strcmp(argv[1], "-d")))
     {
         cout << config.token + " " + config.id + " " + config.IP + " " + config.protocol_version << " " << config.port
              << endl;
