@@ -101,6 +101,7 @@ bool is_sub(T1 &main_source, T2 &&sub_source)
     }
 }
 
+// cstring then string is sub
 template <typename T1, typename T2>
 bool is_sub(T1 &&main_source, T2 &sub_source)
 {
