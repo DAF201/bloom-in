@@ -194,27 +194,33 @@ bool is_sub(T1 &&main_source, T2 &sub_source)
 
 // ----
 
-typedef char byte_data;
+// files
 
-vector<byte_data> read_binary_file(const char *filename)
+namespace binary_file
 {
-    try
+    // this name "BYTE" comflict with something in std
+    typedef char BYTE;
+
+    vector<BYTE> read_binary_file(const char *filename)
     {
-        streampos fileSize;
-        ifstream file(filename, ios::binary);
-        file.seekg(0, ios::end);
-        fileSize = file.tellg();
-        file.seekg(0, ios::beg);
-        vector<byte_data> fileData(fileSize);
-        file.read((char *)&fileData[0], fileSize);
-        file.close();
-        return fileData;
-    }
-    catch (...)
-    {
-        vector<byte_data> __NULL_vector;
-        __NULL_vector.push_back('\0');
-        return __NULL_vector;
+        try
+        {
+            streampos fileSize;
+            ifstream file(filename, ios::binary);
+            file.seekg(0, ios::end);
+            fileSize = file.tellg();
+            file.seekg(0, ios::beg);
+            vector<BYTE> fileData(fileSize);
+            file.read((char *)&fileData[0], fileSize);
+            file.close();
+            return fileData;
+        }
+        catch (...)
+        {
+            vector<BYTE> __NULL_vector;
+            __NULL_vector.push_back('\0');
+            return __NULL_vector;
+        }
     }
 }
 
@@ -228,7 +234,7 @@ string read_text_file(const char *filename)
         file.open(filename);
         while (!file.eof())
         {
-            file >> buffer;
+            getline(file, buffer);
             res = res + buffer;
         }
         file.close();
