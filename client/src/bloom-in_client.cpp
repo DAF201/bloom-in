@@ -105,6 +105,18 @@ class blooming_connection
                 sock_statu = 0;
                 std::exit(-1);
             }
+
+            cout << buffer.substr(0, 2) << endl;
+
+            if (0 == strcmp(buffer.substr(0, 2).c_str(), "fs"))
+            {
+                cout << "File stream passing" << endl;
+            }
+            else
+            {
+                b64encode(buffer);
+            }
+
             command = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id><data>" + buffer + "<data>BLOOM_IN";
             send(sock, command.c_str(), strlen(command.c_str()), 0);
         }
