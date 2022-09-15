@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include <type_traits>
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 // for all string thing I may need in the future
@@ -42,29 +43,6 @@ str_vec str_split_by_space(string input)
     return result;
 }
 
-// remove space for cstring
-char *rm_space(const char *input, int size)
-{
-    char *temp = nullptr;
-    temp = new char[size];
-    int temp_index = 0;
-    for (int i = 0; i < size; i++)
-    {
-        if (input[i] != ' ')
-        {
-            temp[temp_index] = input[i];
-            temp_index++;
-        }
-    }
-    return temp;
-}
-
-// remove space
-string rm_space(string input)
-{
-    
-}
-
 // make a string vector to a string
 string strvec_to_str(str_vec input_vec)
 {
@@ -76,7 +54,41 @@ string strvec_to_str(str_vec input_vec)
     return temp;
 }
 
-// int is sub
+// remove space for cstring
+void rm_space(char *input)
+{
+    int size = strlen(input);
+    int index = 0;
+    char *temp;
+    temp = new char[size];
+    for (int i = 0; i < size; i++)
+    {
+        if (' ' != input[i])
+        {
+            temp[index] = input[i];
+            index++;
+        }
+    }
+    temp[index] = '\0';
+    strcpy(input, temp);
+    delete temp;
+}
+
+// string remove space
+void rm_space(string *input) // to avoid I totally forget how to use pointer (SO WHY DON'T JUST PASS IN REFERENCE...)
+{
+    input->erase(remove(input->begin(), input->end(), ' '), input->end());
+}
+
+// remove substring from string
+void rm_sub(string &main_str, string &sub_str) // here you go, reference
+{
+    string replacement = "";
+    regex target(sub_str);
+    main_str = regex_replace(main_str, target, replacement);
+}
+
+// int is sub, for example 1 is a sub of 12 or 11...
 bool is_sub(int &main_source, int &sub_source)
 {
     string main_source_str = to_string(main_source);
