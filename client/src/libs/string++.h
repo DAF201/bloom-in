@@ -3,7 +3,7 @@
 #include <cstring>
 #include <typeinfo>
 #include <type_traits>
-
+#include <iostream>
 using namespace std;
 
 // for all string thing I may need in the future
@@ -31,15 +31,31 @@ str_vec str_split_by_space(string input)
     return result;
 }
 
+// int is sub
+bool is_sub(int &main_source, int &sub_source)
+{
+    string main_source_str = to_string(main_source);
+    string sub_source_str = to_string(sub_source);
+
+    cout << main_source_str << " " << sub_source_str << endl;
+
+    if (NULL != strstr(main_source_str.c_str(), sub_source_str.c_str()))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// string is sub
 template <typename T>
 bool is_sub(T &main_source, T &sub_source)
 {
-    if (is_same<T, int>::value)
+    if (is_same_v<T, string>)
     {
-        string main_source_str = to_string(main_source);
-        string sub_source_str = to_string(sub_source);
-
-        if (0 == strcmp(main_source_str.c_str(), sub_source_str.c_str()))
+        if (NULL != strstr(main_source.c_str(), sub_source.c_str()))
         {
             return true;
         }
@@ -48,8 +64,55 @@ bool is_sub(T &main_source, T &sub_source)
             return false;
         }
     }
+}
 
-    if (is_same<T, string>::value)
+// cstring is sub
+template <typename T>
+bool is_sub(T &&main_source, T &&sub_source)
+{
+
+    if (is_same_v<T, const char *>)
     {
+        if (NULL != strstr(main_source, sub_source))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+// string then cstring is sub
+template <typename T1, typename T2>
+bool is_sub(T1 &main_source, T2 &&sub_source)
+{
+    if (is_same_v<T1, string> && is_same_v<T2, const char *>)
+    {
+        if (NULL != strstr(main_source.c_str(), sub_source))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+template <typename T1, typename T2>
+bool is_sub(T1 &&main_source, T2 &sub_source)
+{
+    if (is_same_v<T1, const char *> && is_same_v<T2, string>)
+    {
+        if (NULL != strstr(main_source, sub_source.c_str()))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
