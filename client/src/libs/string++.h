@@ -10,7 +10,7 @@ using namespace std;
 
 /*
 definitely, I can make something like
-    
+
     void str_to_vec(string input_str,str_vec destination){...}
 
 but I just don't want... I don't want to change my code style because I need to temporary use c++ while most of the time I was using script languages like lua js py
@@ -20,7 +20,7 @@ Network programming... I assume the network will not be faster than CPU with in 
 */
 typedef vector<string> str_vec;
 
-//split string by space and dump to vector
+// split string by space and dump to vector
 str_vec str_split_by_space(string input)
 {
     string temp = "";
@@ -42,7 +42,30 @@ str_vec str_split_by_space(string input)
     return result;
 }
 
-//make a string vector to a string
+// remove space for cstring
+char *rm_space(const char *input, int size)
+{
+    char *temp = nullptr;
+    temp = new char[size];
+    int temp_index = 0;
+    for (int i = 0; i < size; i++)
+    {
+        if (input[i] != ' ')
+        {
+            temp[temp_index] = input[i];
+            temp_index++;
+        }
+    }
+    return temp;
+}
+
+// remove space
+string rm_space(string input)
+{
+    
+}
+
+// make a string vector to a string
 string strvec_to_str(str_vec input_vec)
 {
     string temp = "";
