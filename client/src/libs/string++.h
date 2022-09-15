@@ -88,6 +88,18 @@ void rm_sub(string &main_str, string &sub_str) // here you go, reference
     main_str = regex_replace(main_str, target, replacement);
 }
 
+// char array remove sub
+void rm_sub(char *main_str, const char *sub_str)
+{
+    string str_main(main_str);
+    string str_sub(sub_str);
+
+    // lazy
+    rm_sub(str_main, str_sub);
+
+    strcpy(main_str, str_main.c_str());
+}
+
 // int is sub, for example 1 is a sub of 12 or 11...
 bool is_sub(int &main_source, int &sub_source)
 {
@@ -106,7 +118,9 @@ bool is_sub(int &main_source, int &sub_source)
     }
 }
 
-// string is sub
+// just for pratice purpose, and then I realize is will be just easier to use overwrite incase I am not make container or so
+
+//  string is sub
 template <typename T>
 bool is_sub(T &main_source, T &sub_source)
 {
