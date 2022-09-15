@@ -1,10 +1,13 @@
 #include <vector>
 #include <string>
 #include <cstring>
-#include <typeinfo>
 #include <type_traits>
 #include <iostream>
 #include <algorithm>
+#include <regex>
+#include <typeinfo>
+#include <fstream>
+#include <type_traits>
 using namespace std;
 
 // for all string thing I may need in the future
@@ -186,5 +189,53 @@ bool is_sub(T1 &&main_source, T2 &sub_source)
         {
             return false;
         }
+    }
+}
+
+// ----
+
+typedef char byte_data;
+
+vector<byte_data> read_binary_file(const char *filename)
+{
+    try
+    {
+        streampos fileSize;
+        ifstream file(filename, ios::binary);
+        file.seekg(0, ios::end);
+        fileSize = file.tellg();
+        file.seekg(0, ios::beg);
+        vector<byte_data> fileData(fileSize);
+        file.read((char *)&fileData[0], fileSize);
+        file.close();
+        return fileData;
+    }
+    catch (...)
+    {
+        vector<byte_data> __NULL_vector;
+        __NULL_vector.push_back('\0');
+        return __NULL_vector;
+    }
+}
+
+string read_text_file(const char *filename)
+{
+    try
+    {
+        fstream file;
+        string buffer;
+        string res = "";
+        file.open(filename);
+        while (!file.eof())
+        {
+            file >> buffer;
+            res = res + buffer;
+        }
+        file.close();
+        return res;
+    }
+    catch (...)
+    {
+        return "";
     }
 }
