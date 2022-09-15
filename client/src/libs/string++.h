@@ -20,6 +20,7 @@ Network programming... I assume the network will not be faster than CPU with in 
 */
 typedef vector<string> str_vec;
 
+//split string by space and dump to vector
 str_vec str_split_by_space(string input)
 {
     string temp = "";
@@ -41,6 +42,7 @@ str_vec str_split_by_space(string input)
     return result;
 }
 
+//make a string vector to a string
 string strvec_to_str(str_vec input_vec)
 {
     string temp = "";
