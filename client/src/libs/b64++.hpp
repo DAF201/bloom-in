@@ -10,34 +10,41 @@
 
 using namespace std;
 
-// typedef char byte_data;
-
-// vector<byte_data> read_binary_file(const char *filename)
-// {
-//     streampos fileSize;
-//     ifstream file(filename, ios::binary);
-//     file.seekg(0, ios::end);
-//     fileSize = file.tellg();
-//     file.seekg(0, ios::beg);
-//     vector<byte_data> fileData(fileSize);
-//     file.read((char *)&fileData[0], fileSize);
-//     return fileData;
-// }
+class No_File_Exist : exception
+{
+public:
+    char *what()
+    {
+        return "No file at given path";
+    }
+};
 
 template <typename T>
-string b64encode(T &source)
+string base64(T &source)
 {
-    string encoded_data = "";
-    if (NULL != strstr(typeid(source).name(), "basic_string"))
+    try
     {
-
-        cout << "is string" << endl;
-        return encoded_data;
+        fstream file;
+        file.open(source);
+        if (!file.is_open())
+        {
+            throw No_File_Exist;
+        }
     }
-
-    if (NULL != strstr(typeid(source).name(), "basic_fstream"))
+    catch (...)
     {
-        cout << "is file stream" << endl;
-        return encoded_data;
+        if (is_same_v(T, string))
+        {
+        }
+
+        if (is_same_v(T, const char *))
+        {
+        }
+
+        if (is_same_v(T, char *))
+        {
+        }
+
+        return "";
     }
 }
