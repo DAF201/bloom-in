@@ -115,7 +115,7 @@ class blooming_connection
             }
             else
             {
-                b64encode(buffer);
+                cout << "command passing" << endl;
             }
 
             command = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id><data>" + buffer + "<data>BLOOM_IN";
