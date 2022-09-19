@@ -3,7 +3,6 @@
 #include <winsock.h>
 #include <string>
 #include <fstream>
-#include ".\libs\b64++.hpp"
 #include ".\libs\string++.h"
 
 #define CONFIG_FILE "./config.config"
@@ -104,6 +103,7 @@ class blooming_connection
             {
                 blooming_end();
                 sock_statu = 0;
+                system("sleep 3");
                 std::exit(-1);
             }
 

@@ -12,3 +12,6 @@ client/test.h
 client/src/test.cpp
 a.exe
 test.bin
+update.bat
+client/compile.bat
+client/compile.bat
