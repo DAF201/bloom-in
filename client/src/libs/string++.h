@@ -46,6 +46,28 @@ str_vec str_split_by_space(string input)
     return result;
 }
 
+// split by char
+str_vec str_split_by_char(string input, char sub)
+{
+    string temp = "";
+    str_vec result;
+    for (int i = 0; i < input.length(); ++i)
+    {
+
+        if (input[i] == sub)
+        {
+            result.push_back(temp);
+            temp = "";
+        }
+        else
+        {
+            temp.push_back(input[i]);
+        }
+    }
+    result.push_back(temp);
+    return result;
+}
+
 // make a string vector to a string
 string strvec_to_str(str_vec input_vec)
 {
