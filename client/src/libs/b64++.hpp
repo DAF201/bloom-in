@@ -30,5 +30,10 @@ string b64_en(resource &source, int source_type)
 
     if (1 == source_type)
     {
+        return base64_encode(source);
+    }
+    else
+    {
+        return base64_encode(source, strlen(source));
     }
 }
