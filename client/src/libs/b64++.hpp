@@ -9,6 +9,9 @@
 #include "base64_file.h"
 
 using namespace std;
+/*
+Credits to owners of base64 funtions, I just make them easier to use
+*/
 
 // base64 encode for file or char*
 string b64_en(char *source)
