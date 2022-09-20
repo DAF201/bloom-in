@@ -10,30 +10,18 @@
 
 using namespace std;
 
-template <typename resource>
-string b64_en(resource &source, int source_type)
+string b64_en(char *source)
 {
-    if (0 == source_type)
+
+    fstream file_stream;
+    file_stream.open(source);
+
+    if (!file_stream.is_open())
     {
-        fstream file_stream;
-        file_stream.open(source);
-
-        if (!file_stream.is_open())
-        {
-            return "";
-        }
-
-        file_stream.close();
-
-        return Base64::encodeFromFile(source);
+        return "";
     }
 
-    if (1 == source_type)
-    {
-        return base64_encode(source);
-    }
-    else
-    {
-        return base64_encode(source, strlen(source));
-    }
+    file_stream.close();
+
+    return Base64::encodeFromFile(source);
 }
