@@ -18,10 +18,20 @@ string b64_en(char *source)
 
     if (!file_stream.is_open())
     {
-        return "";
+        return base64_encode(string(source));
     }
 
     file_stream.close();
 
     return Base64::encodeFromFile(source);
+}
+
+void b64_de(string b64_data, string file_path)
+{
+    return Base64::decodeToFile(file_path, b64_data);
+}
+
+string b64_de(string b64_data)
+{
+    return base64_decode(b64_data);
 }
