@@ -10,6 +10,7 @@
 
 using namespace std;
 
+// base64 encode for file or char*
 string b64_en(char *source)
 {
 
@@ -26,11 +27,13 @@ string b64_en(char *source)
     return Base64::encodeFromFile(source);
 }
 
+// decode file
 void b64_de(string b64_data, string file_path)
 {
     return Base64::decodeToFile(file_path, b64_data);
 }
 
+// decode string
 string b64_de(string b64_data)
 {
     return base64_decode(b64_data);

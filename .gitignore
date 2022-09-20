@@ -16,3 +16,4 @@ update.bat
 client/compile.bat
 client/compile.bat
 client/src/test.exe
+client/src/test.txt
