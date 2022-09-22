@@ -9,6 +9,8 @@
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
 
+bool debug_state = false;
+
 struct config
 {
     string IP;
@@ -107,18 +109,22 @@ class blooming_connection
                 std::exit(-1);
             }
 
-            cout << buffer.substr(0, 2) << endl;
-
             if (0 == strcmp(buffer.substr(0, 2).c_str(), "fs"))
             {
-                cout << "File stream passing" << endl;
+                printf("File stream passing\n");
             }
             else
             {
-                cout << "command passing" << endl;
+                printf("command passing\n");
             }
 
-            command = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id><data>" + buffer + "<data>BLOOM_IN";
+            command = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "0214" + "<target>" + "<data>" + buffer + "<data>BLOOM_IN";
+            if (debug_state)
+            {
+                printf(command.c_str());
+                printf("\n");
+            }
+
             send(sock, command.c_str(), strlen(command.c_str()), 0);
         }
     }
@@ -128,15 +134,25 @@ class blooming_connection
         while (true)
         {
             recv(sock, recv_buffer, 65535, 0);
-            if (0 == strcmp(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || 0 == strcmp(recv_buffer, "\0"))
+            if (0 == strcmp(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()))
             {
+                if (debug_state)
+                {
+                    cout << (0 == strcmp(recv_buffer, "close")) << endl;
+                    cout << (0 == sock_statu) << endl;
+                    cout << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
+                }
+
                 blooming_end();
                 sock_statu = 0;
                 printf("connection closed\n");
                 std::exit(-1);
             }
-            printf(recv_buffer);
-            printf("\n");
+            if (0 != strcmp(recv_buffer, "\0"))
+            {
+                printf(recv_buffer);
+                printf("\n");
+            }
         }
     }
 
@@ -175,11 +191,13 @@ public:
 
 int main(int argc, char **argv)
 {
+
     config config;
     if (2 == argc && (0 == strcmp(argv[1], "--debug") || 0 == strcmp(argv[1], "-d")))
     {
         cout << config.token + " " + config.id + " " + config.IP + " " + config.protocol_version << " " << config.port
              << endl;
+        debug_state = true;
     }
 
     blooming_connection *sock = new blooming_connection(config);

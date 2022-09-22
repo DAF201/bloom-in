@@ -73,7 +73,6 @@ class sub_connection():
             return False
 
     def __connection_close(self):
-        print("connection closed: @"+self.ip)
         self.socket.send(b"close"+b'\0')
         self.socket.close()
 
@@ -95,18 +94,14 @@ class sub_connection():
                 print(self.recv_buffer)
 
                 if re.match(EXIT, self.recv_buffer) != None:
-                    try:
-                        raise Remote_connection_closed(
-                            "connection closed by remote")
-                    except:
-                        pass
+                    raise Remote_connection_closed(
+                        "connection closed by remote")
 
                 if re.match(COMMAND, self.recv_buffer) == None:
-                    try:
-                        raise Command_Syntax_Error("invaild protocol syntax")
-                    except:
-                        pass
+                    raise Command_Syntax_Error("invaild protocol syntax")
+
         except:
+            self.socket.send(b"invaild syntax, connection closing")
             self.socket.close()
             return
 
