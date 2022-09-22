@@ -6,9 +6,7 @@ config = {
 
 HEADER = b'bloom-in protocol V\d\.\d.\d <channel>\w{0,16}<channel> <id>\w{0,16}<id> BLOOM_IN$'
 
-COMMAND = b'bloom-in c <channel>\w{0,16}<channel><id>\w{0,16}<id><target>\w{0,16}<target><data>\w{0,65535}<data>BLOOM_IN$'
-
-FILE = b'bloom-in f <channel>\w{0,16}<channel><id>\w{0,16}<id><target>\w{0,16}<target><data>\w{0,65535}<data>BLOOM_IN$'
+COMMAND = b'bloom-in \w <channel>\w{0,16}<channel><id>\w{0,16}<id><target>\w{0,16}<target><data>\w{0,65535}<data>BLOOM_IN$'
 
 EXIT = b'bloom-in exit V\d\.\d.\d <exit><id>\w{0,16}<id><exit> BLOOM_IN$'
 

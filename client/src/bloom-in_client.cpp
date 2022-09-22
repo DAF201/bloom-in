@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include ".\libs\string++.h"
+#include ".\libs\b64++.hpp"
 
 #define CONFIG_FILE "./config.config"
 #pragma comment(lib, "ws2_32.lib")
@@ -111,21 +112,26 @@ class blooming_connection
 
             if (0 == strcmp(buffer.substr(0, 2).c_str(), "fs"))
             {
-                printf("File stream passing\n");
+                printf("File stream\n");
+                vector<string> args = str_split_by_space(buffer);
+                if (file_exist(args[1].c_str()))
+                {
+                    string b64_buffer = b64_en((char *)args[1].c_str());
+                    cout << b64_buffer << endl;
+                }
             }
             else
             {
-                printf("command passing\n");
+                buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "0214" + "<target>" + "<data>" + buffer + "<data>BLOOM_IN";
             }
 
-            command = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "0214" + "<target>" + "<data>" + buffer + "<data>BLOOM_IN";
             if (debug_state)
             {
-                printf(command.c_str());
+                printf(buffer.c_str());
                 printf("\n");
             }
 
-            send(sock, command.c_str(), strlen(command.c_str()), 0);
+            send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
         }
     }
 
@@ -134,7 +140,7 @@ class blooming_connection
         while (true)
         {
             recv(sock, recv_buffer, 65535, 0);
-            if (0 == strcmp(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()))
+            if (NULL != strstr(recv_buffer, "invaild syntax") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()))
             {
                 if (debug_state)
                 {

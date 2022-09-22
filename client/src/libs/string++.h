@@ -218,6 +218,11 @@ bool is_sub(T1 &&main_source, T2 &sub_source)
 
 // files
 
+bool file_exist(const char *filename)
+{
+    ifstream file(filename);
+    return file.good();
+}
 namespace binary_file
 {
     // this name "BYTE" comflict with something in std
