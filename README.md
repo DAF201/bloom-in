@@ -17,3 +17,7 @@ testing, not stable yet, but sort of working... I will upload the client after i
 09/15/22
 
 <b>I was starting with python but now it becomes a C++ project?<b>
+
+09/26/22
+
+<b>I am kind of under weather... And I am damning busy
