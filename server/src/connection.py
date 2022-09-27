@@ -1,4 +1,5 @@
 import socket
+from telnetlib import theNULL
 import threading
 import re
 import sys
@@ -95,14 +96,23 @@ class sub_connection():
                 if self.extractor(self.recv_buffer, b'<exit>') == [0, 0]:
                     self.channel = self.extractor(
                         self.recv_buffer, b'<channel>')
-                    self.id = self.extractor(self.recv_buffer, b'<id>')
-                    target = self.extractor(self.recv_buffer, b'<target>')
-                    data = self.extractor(self.recv_buffer, b'<data>')
+                    self.channel = self.recv_buffer[self.channel[0]:self.channel[1]]
 
-                    print(self.recv_buffer[self.channel[0]:self.channel[1]])
-                    print(self.recv_buffer[self.id[0]:self.id[1]])
-                    print(self.recv_buffer[target[0]:target[1]])
-                    print(self.recv_buffer[data[0]: data[1]])
+                    self.id = self.extractor(self.recv_buffer, b'<id>')
+                    self.id = self.recv_buffer[self.id[0]:self.id[1]]
+
+                    target = self.extractor(self.recv_buffer, b'<target>')
+                    target = self.recv_buffer[target[0]:target[1]]
+
+                    data = self.extractor(self.recv_buffer, b'<data>')
+                    data = self.recv_buffer[data[0]: data[1]]
+
+                    print(self.channel, self.id, target, data)
+
+                    if target in COMMAND_POOL.keys():
+                        print("has key")
+                    else:
+                        print("no key")
 
                 if re.match(EXIT, self.recv_buffer) != None:
                     raise Remote_connection_closed(
