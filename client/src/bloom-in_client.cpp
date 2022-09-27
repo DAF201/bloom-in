@@ -122,7 +122,7 @@ class blooming_connection
             }
             else
             {
-                buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "0214" + "<target>" + "<data>" + buffer + "<data>BLOOM_IN";
+                buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "0214" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
             }
 
             if (debug_state)
