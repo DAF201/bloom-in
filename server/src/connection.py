@@ -92,6 +92,17 @@ class sub_connection():
                 self.recv_buffer = self.socket.recv(65535)
 
                 print(self.recv_buffer)
+                if self.extractor(self.recv_buffer, b'<exit>') == [0, 0]:
+                    self.channel = self.extractor(
+                        self.recv_buffer, b'<channel>')
+                    self.id = self.extractor(self.recv_buffer, b'<id>')
+                    target = self.extractor(self.recv_buffer, b'<target>')
+                    data = self.extractor(self.recv_buffer, b'<data>')
+
+                    print(self.recv_buffer[self.channel[0]:self.channel[1]])
+                    print(self.recv_buffer[self.id[0]:self.id[1]])
+                    print(self.recv_buffer[target[0]:target[1]])
+                    print(self.recv_buffer[data[0]: data[1]])
 
                 if re.match(EXIT, self.recv_buffer) != None:
                     raise Remote_connection_closed(
@@ -100,7 +111,8 @@ class sub_connection():
                 if re.match(COMMAND, self.recv_buffer) == None:
                     raise Command_Syntax_Error("invaild protocol syntax")
 
-        except:
+        except Exception as e:
+            print(e)
             self.socket.send(b"invaild syntax, connection closing")
             self.socket.close()
             return

@@ -140,7 +140,7 @@ class blooming_connection
         while (true)
         {
             recv(sock, recv_buffer, 65535, 0);
-            if (NULL != strstr(recv_buffer, "invaild syntax") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()))
+            if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()))
             {
                 if (debug_state)
                 {
