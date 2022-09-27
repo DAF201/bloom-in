@@ -1,8 +1,8 @@
 import socket
 import threading
 import re
-import os
 import sys
+import time
 from config import *
 
 
@@ -72,21 +72,21 @@ class sub_connection():
             self.__connection_close()
             return False
 
-    def __connection_close(self):
+    def __connection_close(self) -> None:
         self.socket.send(b"close"+b'\0')
         self.socket.close()
 
-    def __connection_recv(self):
+    def __connection_recv(self) -> None:
         print('start recv')
         recv_t = threading.Thread(target=self.recv)
         recv_t.start()
 
-    def __connection_send(self):
+    def __connection_send(self) -> None:
         print('start send')
         send_t = threading.Thread(target=self.send)
         send_t.start()
 
-    def recv(self):
+    def recv(self) -> None:
         try:
             while 1:
                 self.recv_buffer = self.socket.recv(65535)
@@ -108,3 +108,14 @@ class sub_connection():
     def send(self):
         while 1:
             pass
+
+    def extractor(self, source: str, pattern: str) -> list:
+        try:
+            start = source.find(pattern)
+            end = source.find(pattern, start+len(pattern))
+            if start == -1 or end == -1:
+                return [0, 0]
+            return [start+len(pattern), end]
+        except Exception as e:
+            print(e)
+            return [0, 0]
