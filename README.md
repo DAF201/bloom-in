@@ -21,3 +21,5 @@ testing, not stable yet, but sort of working... I will upload the client after i
 09/26/22
 
 <b>I am kind of under weather... And I am damning busy
+
+(I to stop for a while to catch up my math class now...)
