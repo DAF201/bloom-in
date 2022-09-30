@@ -137,16 +137,18 @@ class blooming_connection
 
     void sock_recv()
     {
+        char last_package[65535] = "";
         while (true)
         {
             recv(sock, recv_buffer, 65535, 0);
-            if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()))
+            if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || 0 == strcmp(last_package, recv_buffer))
             {
                 if (debug_state)
                 {
                     cout << "close by remote server: " << (0 == strcmp(recv_buffer, "close")) << endl;
                     cout << "close by local exit command: " << (0 == sock_statu) << endl;
                     cout << "close because of something went wrong with connection: " << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
+                    cout << "close because the server stopped for some reason or currently under attack: " << (0 == strcmp(last_package, recv_buffer)) << endl;
                 }
 
                 blooming_end();
@@ -156,6 +158,7 @@ class blooming_connection
             }
             if (0 != strcmp(recv_buffer, "\0"))
             {
+                strcpy(last_package, recv_buffer);
                 printf(recv_buffer);
                 printf("\n");
             }

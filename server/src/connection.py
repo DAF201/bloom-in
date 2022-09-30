@@ -61,7 +61,7 @@ class sub_connection():
             sys.exit()
 
         # success
-        self.socket.send(b'welcome, wish you fing your bloom here')
+        self.socket.send(b'welcome, wish you find your bloom here')
 
         # start recv and send
         self.__connection_recv()
@@ -265,6 +265,6 @@ def deactivator() -> None:
                         print(COMMAND_POOL)
             if config["debug"]:
                 print("-----------------------------------------------")
-            time.sleep(10)
+            time.sleep(1)
         except Exception as e:
             print(e)
