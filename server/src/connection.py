@@ -60,6 +60,9 @@ class sub_connection():
             # failed, kill this connection thread(socket closed in except)
             sys.exit()
 
+        # success
+        self.socket.send(b'welcome, wish you fing your bloom here')
+
         # start recv and send
         self.__connection_recv()
         self.__connection_send()
