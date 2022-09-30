@@ -18,3 +18,5 @@ client/compile.bat
 client/src/test.exe
 client/src/test.txt
 bloom.exe
+config.config
+test.exe
