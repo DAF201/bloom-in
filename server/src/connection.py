@@ -1,10 +1,18 @@
 import socket
-from telnetlib import theNULL
 import threading
 import re
 import sys
 import time
 from config import *
+
+
+def deactivator():
+    while(1):
+        for k, v in COMMAND_POOL.items():
+            if v[0] > time.time():
+                del COMMAND_POOL[k]
+            print(k, v)
+        time.sleep(10)
 
 
 class Header_Syntax_Error(Exception):
@@ -96,8 +104,8 @@ class sub_connection():
                 if self.extractor(self.recv_buffer, b'<exit>') == [0, 0]:
                     self.channel = self.extractor(
                         self.recv_buffer, b'<channel>')
-                    self.channel = self.recv_buffer[self.channel[0]:self.channel[1]]
-
+                    self.channel = self.recv_buffer[self.channel[0]
+                        :self.channel[1]]
                     self.id = self.extractor(self.recv_buffer, b'<id>')
                     self.id = self.recv_buffer[self.id[0]:self.id[1]]
 
@@ -110,9 +118,10 @@ class sub_connection():
                     print(self.channel, self.id, target, data)
 
                     if target in COMMAND_POOL.keys():
-                        print("has key")
+                        COMMAND_POOL[target].append(
+                            (int(time.time())+60, target, (self.id, data)))
                     else:
-                        print("no key")
+                        COMMAND_POOL[target] = []
 
                 if re.match(EXIT, self.recv_buffer) != None:
                     raise Remote_connection_closed(
