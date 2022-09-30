@@ -10,12 +10,13 @@ def deactivator() -> None:
     while(1):
         try:
             for command_index in range(len(COMMAND_POOL)):
-                # print(COMMAND_POOL[command_index])
                 if COMMAND_POOL[command_index][0] < time.time():
                     COMMAND_POOL.pop(command_index)
-                    print("size of command pool: "+str(len(COMMAND_POOL)))
-                    print(COMMAND_POOL)
-            print("-----------------------------------------------")
+                    if config["debug"]:
+                        print("size of command pool: "+str(len(COMMAND_POOL)))
+                        print(COMMAND_POOL)
+            if config["debug"]:
+                print("-----------------------------------------------")
             time.sleep(10)
         except Exception as e:
             print(e)
@@ -67,7 +68,8 @@ class sub_connection():
             self.socket.settimeout(3)
             self.head = self.socket.recv(1024)
             if re.match(HEADER, self.head) == None:
-                print(self.head)
+                if config["debug"]:
+                    print(self.head)
                 raise Header_Syntax_Error("invaild protocol syntax")
             self.socket.settimeout(None)
             return True
@@ -92,12 +94,14 @@ class sub_connection():
         self.socket.close()
 
     def __connection_recv(self) -> None:
-        print('start recv')
+        if config["debug"]:
+            print('start recv')
         recv_t = threading.Thread(target=self.recv)
         recv_t.start()
 
     def __connection_send(self) -> None:
-        print('start send')
+        if config["debug"]:
+            print('start send')
         send_t = threading.Thread(target=self.send)
         send_t.start()
 
@@ -106,11 +110,14 @@ class sub_connection():
             while 1:
                 self.recv_buffer = self.socket.recv(65535)
 
-                print(self.recv_buffer)
+                if config["debug"]:
+                    print(self.recv_buffer)
+
                 if self.extractor(self.recv_buffer, b'<exit>') == [0, 0]:
                     self.channel = self.extractor(
                         self.recv_buffer, b'<channel>')
-                    self.channel = self.recv_buffer[self.channel[0]:self.channel[1]]
+                    self.channel = self.recv_buffer[self.channel[0]
+                        :self.channel[1]]
                     self.id = self.extractor(self.recv_buffer, b'<id>')
                     self.id = self.recv_buffer[self.id[0]:self.id[1]]
 
@@ -120,7 +127,8 @@ class sub_connection():
                     data = self.extractor(self.recv_buffer, b'<data>')
                     data = self.recv_buffer[data[0]: data[1]]
 
-                    print(self.channel, self.id, target, data)
+                    if config["debug"]:
+                        print(self.channel, self.id, target, data)
 
                     if data == b'':
                         raise Command_Syntax_Error("invaild protocol syntax")

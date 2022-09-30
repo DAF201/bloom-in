@@ -1,6 +1,7 @@
 config = {
     "port": 4215,
-    "ip": "0.0.0.0"
+    "ip": "0.0.0.0",
+    "debug": 1
 }
 
 HEADER = b'bloom-in protocol V\d\.\d.\d <channel>\w{0,16}<channel> <id>\w{0,16}<id> BLOOM_IN$'
