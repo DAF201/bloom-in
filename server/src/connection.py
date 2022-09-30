@@ -8,11 +8,16 @@ from config import *
 
 def deactivator() -> None:
     while(1):
-        for id, commands in COMMAND_POOL.items():
-            for command_expire_time, command_content in commands.items():
-                if command_expire_time > time.time():
-                    del commands[command_expire_time]
-        time.sleep(10)
+        try:
+            for command_index in range(len(COMMAND_POOL)):
+                print(COMMAND_POOL[command_index])
+                if COMMAND_POOL[command_index][0] < time.time():
+                    COMMAND_POOL.pop(command_index)
+                    print("size of command pool: "+str(len(COMMAND_POOL)))
+            print("-----------------------------------------------")
+            time.sleep(10)
+        except Exception as e:
+            print(e)
 
 
 class Header_Syntax_Error(Exception):
@@ -119,13 +124,8 @@ class sub_connection():
                     if data == b'':
                         raise Command_Syntax_Error("invaild protocol syntax")
 
-                    if target in COMMAND_POOL.keys():
-                        COMMAND_POOL[target][int(
-                            time.time())+30] = (self.id, target, data)
-                    else:
-                        COMMAND_POOL[target] = {}
-                        COMMAND_POOL[target][int(
-                            time.time())+30] = (self.id, target, data)
+                    COMMAND_POOL.append(
+                        (int(time.time())+60, target, self.id, data, self.socket))
 
                 if re.match(EXIT, self.recv_buffer) != None:
                     raise Remote_connection_closed(
