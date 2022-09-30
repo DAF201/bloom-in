@@ -144,9 +144,9 @@ class blooming_connection
             {
                 if (debug_state)
                 {
-                    cout << (0 == strcmp(recv_buffer, "close")) << endl;
-                    cout << (0 == sock_statu) << endl;
-                    cout << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
+                    cout << "close by remote server: " << (0 == strcmp(recv_buffer, "close")) << endl;
+                    cout << "close by local exit command: " << (0 == sock_statu) << endl;
+                    cout << "close because of something went wrong with connection: " << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
                 }
 
                 blooming_end();

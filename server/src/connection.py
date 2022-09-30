@@ -10,10 +10,11 @@ def deactivator() -> None:
     while(1):
         try:
             for command_index in range(len(COMMAND_POOL)):
-                print(COMMAND_POOL[command_index])
+                # print(COMMAND_POOL[command_index])
                 if COMMAND_POOL[command_index][0] < time.time():
                     COMMAND_POOL.pop(command_index)
                     print("size of command pool: "+str(len(COMMAND_POOL)))
+                    print(COMMAND_POOL)
             print("-----------------------------------------------")
             time.sleep(10)
         except Exception as e:
