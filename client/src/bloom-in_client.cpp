@@ -122,7 +122,7 @@ class blooming_connection
             }
             else
             {
-                buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "0214" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
+                buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "test_machine_2" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
             }
 
             if (debug_state)
@@ -141,6 +141,11 @@ class blooming_connection
         while (true)
         {
             recv(sock, recv_buffer, 65535, 0);
+            if (debug_state)
+            {
+                cout << recv_buffer << endl;
+            }
+
             if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || 0 == strcmp(last_package, recv_buffer))
             {
                 if (debug_state)

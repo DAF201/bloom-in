@@ -4,6 +4,7 @@ import re
 import sys
 import time
 from config import *
+import inspect
 
 # invaild connection header
 
@@ -112,6 +113,9 @@ class sub_connection():
     def __connection_close(self) -> None:
         '''close connection from server'''
 
+        if config["debug"]:
+            print('exit from: ', inspect.stack()[1][3])
+
         # try send close command to 'client
         self.socket.send(b"close"+b'\0')
         # close socket
@@ -163,7 +167,8 @@ class sub_connection():
                     self.channel = self.extractor(
                         self.recv_buffer, b'<channel>')
                     if self.recv_buffer != [0, 0]:
-                        self.channel = self.recv_buffer[self.channel[0]:self.channel[1]]
+                        self.channel = self.recv_buffer[self.channel[0]
+                            :self.channel[1]]
                     else:
                         self.__connection_close()
 
@@ -232,9 +237,20 @@ class sub_connection():
                 return
 
     def send(self) -> None:
-        '''TBD'''
+        '''Get command out of pool and send to client'''
         while 1:
-            pass
+            try:
+                for command in COMMAND_POOL:
+                    if command[1] == self.id:
+                        self.socket.send(command[3])
+                    time.sleep(1)
+            except:
+                try:
+                    self.__connection_close()
+                except:
+                    pass
+                finally:
+                    return
 
     def extractor(self, source: str, pattern: str) -> list:
         '''get data out from raw data, return list of starting position and ending position
@@ -260,11 +276,11 @@ def deactivator() -> None:
             for command_index in range(len(COMMAND_POOL)):
                 if COMMAND_POOL[command_index][0] < time.time():
                     COMMAND_POOL.pop(command_index)
-                    if config["debug"]:
-                        print("size of command pool: "+str(len(COMMAND_POOL)))
-                        print(COMMAND_POOL)
-            if config["debug"]:
-                print("-----------------------------------------------")
+                    # if config["debug"]:
+                    #     print("size of command pool: "+str(len(COMMAND_POOL)))
+                    #     print(COMMAND_POOL)
+            # if config["debug"]:
+            #     print("-----------------------------------------------")
             time.sleep(1)
         except Exception as e:
             print(e)
