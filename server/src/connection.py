@@ -6,12 +6,12 @@ import time
 from config import *
 
 
-def deactivator():
+def deactivator() -> None:
     while(1):
-        for k, v in COMMAND_POOL.items():
-            if v[0] > time.time():
-                del COMMAND_POOL[k]
-            print(k, v)
+        for id, commands in COMMAND_POOL.items():
+            for command_expire_time, command_content in commands.items():
+                if command_expire_time > time.time():
+                    del commands[command_expire_time]
         time.sleep(10)
 
 
@@ -104,8 +104,7 @@ class sub_connection():
                 if self.extractor(self.recv_buffer, b'<exit>') == [0, 0]:
                     self.channel = self.extractor(
                         self.recv_buffer, b'<channel>')
-                    self.channel = self.recv_buffer[self.channel[0]
-                        :self.channel[1]]
+                    self.channel = self.recv_buffer[self.channel[0]:self.channel[1]]
                     self.id = self.extractor(self.recv_buffer, b'<id>')
                     self.id = self.recv_buffer[self.id[0]:self.id[1]]
 
@@ -117,11 +116,16 @@ class sub_connection():
 
                     print(self.channel, self.id, target, data)
 
+                    if data == b'':
+                        raise Command_Syntax_Error("invaild protocol syntax")
+
                     if target in COMMAND_POOL.keys():
-                        COMMAND_POOL[target].append(
-                            (int(time.time())+60, target, (self.id, data)))
+                        COMMAND_POOL[target][int(
+                            time.time())+30] = (self.id, target, data)
                     else:
-                        COMMAND_POOL[target] = []
+                        COMMAND_POOL[target] = {}
+                        COMMAND_POOL[target][int(
+                            time.time())+30] = (self.id, target, data)
 
                 if re.match(EXIT, self.recv_buffer) != None:
                     raise Remote_connection_closed(
@@ -136,7 +140,7 @@ class sub_connection():
             self.socket.close()
             return
 
-    def send(self):
+    def send(self) -> None:
         while 1:
             pass
 

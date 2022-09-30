@@ -7,8 +7,8 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((connection.config["ip"], connection.config["port"]))
 s.listen(2)
 
-command_pool_manager = threading.Thread()
-
+command_pool_manager = threading.Thread(target=connection.deactivator)
+command_pool_manager.start()
 while True:
     sock, addr = s.accept()
     sub_connection = threading.Thread(
