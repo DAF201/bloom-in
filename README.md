@@ -15,6 +15,10 @@ my new toy to connect two pcs in two different private networks (which is basica
 
 (I to stop for a while to catch up my math class now...)
 
+10/02/22
+  
+Still super busy... Damn it  
+  
 ---
 
 testing, not stable yet, but sort of working... I will upload the client after it become more stable
