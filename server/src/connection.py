@@ -224,7 +224,11 @@ class sub_connection():
                     if command[1] == self.id:
                         self.socket.send(command[3])
                     time.sleep(1)
-            except:
+            except Exception as e:
+
+                if config['debug']:
+                    print(e)
+
                 try:
                     self.__connection_close()
                 except:
