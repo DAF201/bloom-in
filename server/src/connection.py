@@ -88,7 +88,9 @@ class sub_connection():
 
             self.id = self.extractor(self.head, b'<id>')
             self.id = self.head[self.id[0]: self.id[1]]
-            print(self.id)
+
+            self.channel = self.extractor(self.head, b'<channel>')
+            self.channel = self.head[self.channel[0]: self.channel[1]]
 
             # success, remove timeout
             self.socket.settimeout(None)
@@ -170,17 +172,11 @@ class sub_connection():
                     # take data out from raw data
                     extracted_data = self.extract_data(EXTRACTOR_SYNTAX)
 
-                    self.channel = self.recv_buffer[extracted_data[0]
-                                                    [0]: extracted_data[0][1]]
+                    target = self.recv_buffer[extracted_data[0]
+                                              [0]: extracted_data[0][1]]
 
-                    self.id = self.recv_buffer[extracted_data[1]
-                                               [0]: extracted_data[1][1]]
-
-                    target = self.recv_buffer[extracted_data[2]
-                                              [0]: extracted_data[2][1]]
-
-                    data = self.recv_buffer[extracted_data[3]
-                                            [0]: extracted_data[3][1]]
+                    data = self.recv_buffer[extracted_data[1]
+                                            [0]: extracted_data[1][1]]
 
                     # if config["debug"]:
                     #     print(self.channel, self.id, target, data)
@@ -235,6 +231,7 @@ class sub_connection():
                 for command in COMMAND_POOL:
                     if command[1] == self.id:
                         self.socket.send(command[3]+b'\0')
+                        COMMAND_POOL.remove(command)
                     time.sleep(1)
             except Exception as e:
 
