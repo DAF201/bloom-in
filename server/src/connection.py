@@ -5,7 +5,7 @@ import sys
 import time
 from config import *
 import inspect
-
+import base64
 # invaild connection header
 
 
@@ -63,7 +63,8 @@ class sub_connection():
             sys.exit()
 
         # success
-        self.socket.send(b'welcome, wish you find your bloom here')
+        self.socket.send(base64.b64encode(
+            b'welcome, wish you find your bloom here'))
 
         # start recv and send
         self.__connection_recv()

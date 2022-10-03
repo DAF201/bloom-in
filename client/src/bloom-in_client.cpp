@@ -144,16 +144,24 @@ class blooming_connection
             if (debug_state)
             {
                 cout << recv_buffer << endl;
+                cout << base64_decode(string(recv_buffer)) << endl;
             }
 
-            if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || 0 == strcmp(last_package, recv_buffer))
+            if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || (0 == strcmp(last_package, recv_buffer)))
             {
                 if (debug_state)
                 {
                     cout << "close by remote server: " << (0 == strcmp(recv_buffer, "close")) << endl;
                     cout << "close by local exit command: " << (0 == sock_statu) << endl;
                     cout << "close because of something went wrong with connection: " << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
-                    cout << "close because the server didn't response for some reason or currently under attack: " << (0 == strcmp(last_package, recv_buffer)) << endl;
+                    if (0 == sock_statu)
+                    {
+                        cout << "close because the server didn't response for some reasons or currently under attack: 0" << endl;
+                    }
+                    else
+                    {
+                        cout << "close because the server didn't response for some reasons or currently under attack: " << (0 == strcmp(last_package, recv_buffer)) << endl;
+                    }
                 }
 
                 blooming_end();
