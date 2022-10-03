@@ -234,7 +234,7 @@ class sub_connection():
             try:
                 for command in COMMAND_POOL:
                     if command[1] == self.id:
-                        self.socket.send(command[3])
+                        self.socket.send(command[3]+b'\0')
                     time.sleep(1)
             except Exception as e:
 
