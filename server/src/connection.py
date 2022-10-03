@@ -45,6 +45,7 @@ class sub_connection():
         # data type declearation
         self.socket: socket.socket  # socket body
         self.ip: str  # ip address
+        self.id: str  # id
         self.recv: threading.Thread  # recieve thread
         self.send: threading.Thread  # send thread
         self.__connection__init: function  # connection init
@@ -84,6 +85,10 @@ class sub_connection():
                 if config["debug"]:
                     print(self.head)
                 raise Header_Syntax_Error("invaild protocol syntax")
+
+            self.id = self.extractor(self.head, b'<id>')
+            self.id = self.head[self.id[0]: self.id[1]]
+            print(self.id)
 
             # success, remove timeout
             self.socket.settimeout(None)
@@ -165,13 +170,20 @@ class sub_connection():
                     # take data out from raw data
                     extracted_data = self.extract_data(EXTRACTOR_SYNTAX)
 
-                    self.channel = extracted_data[0]
-                    self.id = extracted_data[1]
-                    target = extracted_data[2]
-                    data = extracted_data[3]
+                    self.channel = self.recv_buffer[extracted_data[0]
+                                                    [0]: extracted_data[0][1]]
 
-                    if config["debug"]:
-                        print(self.channel, self.id, target, data)
+                    self.id = self.recv_buffer[extracted_data[1]
+                                               [0]: extracted_data[1][1]]
+
+                    target = self.recv_buffer[extracted_data[2]
+                                              [0]: extracted_data[2][1]]
+
+                    data = self.recv_buffer[extracted_data[3]
+                                            [0]: extracted_data[3][1]]
+
+                    # if config["debug"]:
+                    #     print(self.channel, self.id, target, data)
 
                     # empty package, treate as conection closed
                     if data == b'':

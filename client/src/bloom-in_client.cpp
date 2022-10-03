@@ -122,7 +122,7 @@ class blooming_connection
             }
             else
             {
-                buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "test_machine_2" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
+                buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "test02" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
             }
 
             if (debug_state)
@@ -153,7 +153,7 @@ class blooming_connection
                     cout << "close by remote server: " << (0 == strcmp(recv_buffer, "close")) << endl;
                     cout << "close by local exit command: " << (0 == sock_statu) << endl;
                     cout << "close because of something went wrong with connection: " << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
-                    cout << "close because the server stopped for some reason or currently under attack: " << (0 == strcmp(last_package, recv_buffer)) << endl;
+                    cout << "close because the server didn't response for some reason or currently under attack: " << (0 == strcmp(last_package, recv_buffer)) << endl;
                 }
 
                 blooming_end();
