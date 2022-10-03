@@ -11,3 +11,5 @@ COMMAND = b'bloom-in \w <channel>\w{0,16}<channel><id>\w{0,16}<id><target>\w{0,1
 EXIT = b'bloom-in exit V\d\.\d.\d <exit><id>\w{0,16}<id><exit> BLOOM_IN$'
 
 COMMAND_POOL = []
+
+EXTRACTOR_SYNTAX = (b'<channel>', b'<id>', b'<target>', b'<data>')

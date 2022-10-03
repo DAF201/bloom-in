@@ -163,32 +163,12 @@ class sub_connection():
                 if self.extractor(self.recv_buffer, b'<exit>') == [0, 0]:
 
                     # take data out from raw data
+                    extracted_data = self.extract_data(EXTRACTOR_SYNTAX)
 
-                    self.channel = self.extractor(
-                        self.recv_buffer, b'<channel>')
-                    if self.recv_buffer != [0, 0]:
-                        self.channel = self.recv_buffer[self.channel[0]
-                            :self.channel[1]]
-                    else:
-                        self.__connection_close()
-
-                    self.id = self.extractor(self.recv_buffer, b'<id>')
-                    if self.id != [0, 0]:
-                        self.id = self.recv_buffer[self.id[0]:self.id[1]]
-                    else:
-                        self.__connection_close()
-
-                    target = self.extractor(self.recv_buffer, b'<target>')
-                    if target != [0, 0]:
-                        target = self.recv_buffer[target[0]:target[1]]
-                    else:
-                        self.__connection_close()
-
-                    data = self.extractor(self.recv_buffer, b'<data>')
-                    if data != [0, 0]:
-                        data = self.recv_buffer[data[0]: data[1]]
-                    else:
-                        self.__connection_close()
+                    self.channel = extracted_data[0]
+                    self.id = extracted_data[1]
+                    target = extracted_data[2]
+                    data = extracted_data[3]
 
                     if config["debug"]:
                         print(self.channel, self.id, target, data)
@@ -267,6 +247,14 @@ class sub_connection():
         except Exception as e:
             print(e)
             return [0, 0]
+
+    def extract_data(self, extractor_syntax) -> list:
+        '''extract wanted data'''
+        result = []
+        for key in extractor_syntax:
+            data = self.extractor(self.recv_buffer, key)
+            result.append(data)
+        return result
 
 
 def deactivator() -> None:
