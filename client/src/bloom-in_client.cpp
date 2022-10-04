@@ -125,11 +125,11 @@ class blooming_connection
                 buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "test02" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
             }
 
-            if (debug_state)
-            {
-                printf(buffer.c_str());
-                printf("\n");
-            }
+            // if (debug_state)
+            // {
+            //     printf(buffer.c_str());
+            //     printf("\n");
+            // }
 
             send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
         }
@@ -141,11 +141,11 @@ class blooming_connection
         while (true)
         {
             recv(sock, recv_buffer, 65535, 0);
-            if (debug_state)
-            {
-                cout << recv_buffer << endl;
-                cout << base64_decode(string(recv_buffer)) << endl;
-            }
+            // if (debug_state)
+            // {
+            //     cout << recv_buffer << endl;
+            //     cout << base64_decode(string(recv_buffer)) << endl;
+            // }
 
             if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || (0 == strcmp(last_package, recv_buffer)))
             {
@@ -169,10 +169,11 @@ class blooming_connection
                 printf("connection closed\n");
                 std::exit(-1);
             }
+
             if (0 != strcmp(recv_buffer, "\0"))
             {
                 strcpy(last_package, recv_buffer);
-                printf(recv_buffer);
+                printf(base64_decode(string(recv_buffer)).c_str());
                 printf("\n");
             }
         }
