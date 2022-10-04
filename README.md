@@ -18,6 +18,10 @@ my new toy to connect two pcs in two different private networks (which is basica
 10/02/22
   
 Still super busy... Damn it  
+
+10/04/22
+
+Worked, sort of
   
 ---
 
