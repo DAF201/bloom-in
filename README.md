@@ -22,6 +22,7 @@ Still super busy... Damn it
 10/04/22
 
 Worked, sort of
+  
 ---
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
 ![](https://github.com/DAF201/bloom-in/blob/main/images/A76B9DE1-EC91-4E55-B9A0-CB426166582D.jpg)
