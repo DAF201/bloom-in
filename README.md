@@ -22,7 +22,10 @@ Still super busy... Damn it
 10/04/22
 
 Worked, sort of
-  
+---
+I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT.
+![](https://github.com/DAF201/bloom-in/blob/main/images/A76B9DE1-EC91-4E55-B9A0-CB426166582D.jpg)
+![](https://github.com/DAF201/bloom-in/blob/main/images/B4EA362E-45F4-4F80-BF2A-D5812E548FE8.jpg)
 ---
 
 testing, not stable yet, but sort of working... I will upload the client after it become more stable
