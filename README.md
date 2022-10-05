@@ -21,7 +21,7 @@ Still super busy... Damn it
 
 10/04/22
 
-Worked, sort of
+Worked, sort of(Sorry for I am working in lab, the photo quality is not that good, and the screen and camera are dirty)
   
 ---
   
