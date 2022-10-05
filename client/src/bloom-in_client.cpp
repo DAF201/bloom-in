@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 #include ".\libs\string++.h"
-#include ".\libs\b64++.hpp"
+#include ".\libs\b64++.h"
 
 #define CONFIG_FILE "./config.config"
 #pragma comment(lib, "ws2_32.lib")
