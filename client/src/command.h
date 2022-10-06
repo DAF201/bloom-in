@@ -22,6 +22,7 @@ struct command
 
     string execute()
     {
+        int start_time = (int)time(NULL);
         FILE *pipe = _popen(this->command_content->c_str(), "r");
         char pipe_buffer[128];
         string result = "";
