@@ -23,11 +23,21 @@ struct command
     string execute()
     {
         FILE *pipe = _popen(this->command_content->c_str(), "r");
+        char pipe_buffer[128];
         string result = "";
+
         if (!pipe)
         {
             _pclose(pipe);
             return "Failed";
         }
+        while (!feof(pipe))
+        {
+            if (fgets(pipe_buffer, 128, pipe) != NULL)
+                result += pipe_buffer;
+        }
+
+        _pclose(pipe);
+        return result;
     }
 };
