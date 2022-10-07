@@ -47,25 +47,46 @@ str_vec str_split_by_space(string input)
 }
 
 typedef vector<string> str_vec;
-str_vec str_split_first_space(string input)
+str_vec str_split_space(string input, int repeat_times)
 {
     string temp = "";
+    int counter = 0;
     str_vec result;
-    for (int i = 0; i < input.length(); ++i)
+
+    if (NULL == strstr(input.c_str(), " "))
     {
-        if (input[i] == ' ')
+        result.push_back(input);
+        return result;
+    }
+
+    for (int i = 0; i < input.size(); i++)
+    {
+        if (counter > repeat_times)
         {
-            result.push_back(temp);
-            result.push_back(input.substr(i, input.length()));
             return result;
+        }
+
+        if (input[i] == ' ' && counter < repeat_times)
+        {
+            counter++;
+            result.push_back(temp);
+            temp = "";
         }
         else
         {
-            temp.push_back(input[i]);
+            temp += input[i];
         }
     }
-    result.push_back("");
-    return result;
+
+    if (temp != "")
+    {
+        result.push_back(temp);
+        return result;
+    }
+    else
+    {
+        return result;
+    }
 }
 
 // split by char

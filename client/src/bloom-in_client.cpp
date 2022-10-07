@@ -98,8 +98,8 @@ class blooming_connection
     {
         string user_input_buffer;
         string command_type;
-        string sender;
         string command_content;
+        string formated_command;
 
         getline(cin, user_input_buffer);
 
@@ -111,18 +111,39 @@ class blooming_connection
             std::exit(-1);
         }
 
-        str_vec splited_input_buffer = str_split_by_space(user_input_buffer);
+        str_vec splited_input_buffer = str_split_space(user_input_buffer, 2);
+        if (1 == splited_input_buffer.size())
+        {
+            command_type = "print";
+            command_content = user_input_buffer;
+        }
+        else
+        {
+            command_type = splited_input_buffer[0];
+            command_content = splited_input_buffer[1];
+        }
 
-        command_type = splited_input_buffer[0];
-        sender = this->local_id;
-        command_content = splited_input_buffer[1];
+        if (command_type == "execute")
+        {
+        }
+
+        if (command_type == "fs")
+        {
+        }
+
+        if (command_type == "dl")
+        {
+        }
+
+        if (command_type == "print")
+        {
+        }
     }
 
     void blooming_command_analysiser()
     {
 
         string command_type;
-        string sender;
         string command_content;
     }
 
