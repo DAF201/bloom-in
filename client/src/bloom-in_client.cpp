@@ -98,6 +98,7 @@ class blooming_connection
     {
         string user_input_buffer;
         string command_type;
+        string command_target;
         string command_content;
         string formated_command;
 
@@ -120,7 +121,8 @@ class blooming_connection
         else
         {
             command_type = splited_input_buffer[0];
-            command_content = splited_input_buffer[1];
+            command_target = splited_input_buffer[1];
+            command_content = splited_input_buffer[2];
         }
 
         if (command_type == "execute")
