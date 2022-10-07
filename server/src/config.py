@@ -13,3 +13,5 @@ EXIT = b'bloom-in exit V\d\.\d.\d <exit><id>\w{0,16}<id><exit> BLOOM_IN$'
 COMMAND_POOL = []
 
 EXTRACTOR_SYNTAX = (b'<target>', b'<data>')
+
+SENDER_SYNTAX = b''

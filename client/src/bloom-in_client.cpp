@@ -94,6 +94,28 @@ class blooming_connection
         send(sock, head.c_str(), strlen(head.c_str()), 0);
     }
 
+    string *blooming_command_formator()
+    {
+        string user_input_buffer;
+        getline(cin, user_input_buffer);
+
+        if (is_sub(user_input_buffer, (char *)"exit"))
+        {
+            blooming_end();
+            sock_statu = 0;
+            system("sleep 3");
+            std::exit(-1);
+        }
+
+        string command_type;
+        string sender;
+        string command_content;
+    }
+
+    void blooming_command_analysiser()
+    {
+    }
+
     void sock_send()
     {
         string buffer;

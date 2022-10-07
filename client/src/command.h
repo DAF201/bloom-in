@@ -6,21 +6,25 @@
 
 using namespace std;
 
+const static string command_type[] = {"COMMANDS", "FILE_STREAM", "PRINTING"};
+
 struct command
 {
+    string *command_type;
     string *command_content;
     string *command_send_from;
-    int *command_send_time;
-    string *command_execution_result;
+    int command_send_time;
+    string command_execution_result;
 
-    command(string *command_content, string *command_send_from, int *command_send_time)
+    command(string *command_type, string *command_content, string *command_send_from)
     {
+        this->command_type = command_type;
         this->command_content = command_content;
         this->command_send_from = command_send_from;
-        this->command_send_time = command_send_time;
+        this->command_send_time = (int)time(NULL);
     }
 
-    string execute()
+    void execute()
     {
         int start_time = (int)time(NULL);
         FILE *pipe = _popen(this->command_content->c_str(), "r");
@@ -30,7 +34,7 @@ struct command
         if (!pipe)
         {
             _pclose(pipe);
-            return "Failed";
+            return;
         }
         while (!feof(pipe))
         {
@@ -39,6 +43,6 @@ struct command
         }
 
         _pclose(pipe);
-        return result;
+        this->command_execution_result = result;
     }
 };
