@@ -97,6 +97,10 @@ class blooming_connection
     string *blooming_command_formator()
     {
         string user_input_buffer;
+        string command_type;
+        string sender;
+        string command_content;
+
         getline(cin, user_input_buffer);
 
         if (is_sub(user_input_buffer, (char *)"exit"))
@@ -107,13 +111,19 @@ class blooming_connection
             std::exit(-1);
         }
 
-        string command_type;
-        string sender;
-        string command_content;
+        str_vec splited_input_buffer = str_split_by_space(user_input_buffer);
+
+        command_type = splited_input_buffer[0];
+        sender = this->local_id;
+        command_content = splited_input_buffer[1];
     }
 
     void blooming_command_analysiser()
     {
+
+        string command_type;
+        string sender;
+        string command_content;
     }
 
     void sock_send()

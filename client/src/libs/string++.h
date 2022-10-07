@@ -46,6 +46,28 @@ str_vec str_split_by_space(string input)
     return result;
 }
 
+typedef vector<string> str_vec;
+str_vec str_split_first_space(string input)
+{
+    string temp = "";
+    str_vec result;
+    for (int i = 0; i < input.length(); ++i)
+    {
+        if (input[i] == ' ')
+        {
+            result.push_back(temp);
+            result.push_back(input.substr(i, input.length()));
+            return result;
+        }
+        else
+        {
+            temp.push_back(input[i]);
+        }
+    }
+    result.push_back("");
+    return result;
+}
+
 // split by char
 str_vec str_split_by_char(string input, char sub)
 {
