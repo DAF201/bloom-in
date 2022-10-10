@@ -8,6 +8,9 @@
 #include <typeinfo>
 #include <fstream>
 #include <type_traits>
+
+#define STRING_NO_FOUND 18446744073709551615
+
 using namespace std;
 
 // for all string thing I may need in the future
@@ -168,6 +171,18 @@ void rm_sub(char *main_str, const char *sub_str)
     strcpy(main_str, str_main.c_str());
 }
 
+// Does not include the last \0
+template <typename TEXT>
+unsigned int text_size(TEXT input_char)
+{
+    int counter = 0;
+    while (input_char[counter] != '\0' && counter != 2147483647)
+    {
+        counter++;
+    }
+    return counter;
+}
+
 // int is sub, for example 1 is a sub of 12 or 11...
 bool is_sub(int &main_source, int &sub_source)
 {
@@ -186,74 +201,41 @@ bool is_sub(int &main_source, int &sub_source)
     }
 }
 
-// just for pratice purpose, and then I realize is will be just easier to use overwrite incase I am not make container or so
-
-//  string is sub
-template <typename T>
-bool is_sub(T &main_source, T &sub_source)
+// same type TEXT compare
+template <typename TEXT>
+bool is_sub(TEXT main, TEXT sub)
 {
-    if (is_same_v<T, string>)
+    if (text_size(main) < text_size(sub))
     {
-        if (NULL != strstr(main_source.c_str(), sub_source.c_str()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
+    }
+
+    try
+    {
+        return !(string(main).find(string(sub)) == STRING_NO_FOUND);
+    }
+    catch (...)
+    {
+        return false;
     }
 }
 
-// cstring is sub
-template <typename T>
-bool is_sub(T &&main_source, T &&sub_source)
+// different type text compare
+template <typename TEXT_TYPE_1, typename TEXT_TYPE_2>
+bool is_sub(TEXT_TYPE_1 main, TEXT_TYPE_2 sub)
 {
-
-    if (is_same_v<T, const char *>)
+    if (text_size(main) < text_size(sub))
     {
-        if (NULL != strstr(main_source, sub_source))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
-}
 
-// string then cstring is sub
-template <typename T1, typename T2>
-bool is_sub(T1 &main_source, T2 &&sub_source)
-{
-    if (is_same_v<T1, string> && is_same_v<T2, const char *>)
+    try
     {
-        if (NULL != strstr(main_source.c_str(), sub_source))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return !(string(main).find(string(sub)) == STRING_NO_FOUND);
     }
-}
-
-// cstring then string is sub
-template <typename T1, typename T2>
-bool is_sub(T1 &&main_source, T2 &sub_source)
-{
-    if (is_same_v<T1, const char *> && is_same_v<T2, string>)
+    catch (...)
     {
-        if (NULL != strstr(main_source, sub_source.c_str()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }
 

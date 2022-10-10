@@ -222,6 +222,7 @@ class blooming_connection
 
                 blooming_end();
                 sock_statu = 0;
+                printf(recv_buffer);
                 printf("connection closed\n");
                 std::exit(-1);
             }
