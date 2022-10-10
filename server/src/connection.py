@@ -60,7 +60,7 @@ class sub_connection():
         # check header
         if not self.__connection__init():
             # failed, kill this connection thread(socket closed in except)
-            sys.exit()
+            self.__connection_close()
 
         # success
         self.socket.send(base64.b64encode(
@@ -136,6 +136,7 @@ class sub_connection():
             pass
         finally:
             del self
+            sys.exit()
 
     def __connection_recv(self) -> None:
         '''start recv thread'''
