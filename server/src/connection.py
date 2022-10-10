@@ -133,6 +133,7 @@ class sub_connection():
         try:
             self.socket.shutdown(socket.SHUT_RDWR)
         except:
+            del self
             pass
 
     def __connection_recv(self) -> None:
@@ -269,6 +270,9 @@ class sub_connection():
             data = self.extractor(self.recv_buffer, key)
             result.append(data)
         return result
+
+    def __del__(self):
+        print('Destructing')
 
 
 def deactivator() -> None:

@@ -115,19 +115,35 @@ class blooming_connection
         str_vec splited_input_buffer = str_split_space(user_input_buffer, 2);
         if (1 == splited_input_buffer.size())
         {
-            command_type = "print";
-            command_content = user_input_buffer;
+            command_type = "help";
         }
         else
         {
-            command_type = splited_input_buffer[0];
-            command_target = splited_input_buffer[1];
-            command_content = splited_input_buffer[2];
+            try
+            {
+                command_type = splited_input_buffer[0];
+                command_target = splited_input_buffer[1];
+                command_content = splited_input_buffer[2];
+            }
+            catch (...)
+            {
+                printf("syntax error\n");
+            }
         }
 
-        cout << command_type << endl;
-        cout << command_target << endl;
-        cout << command_content << endl;
+        if (debug_state)
+        {
+            printf("command type: %s%s", command_type.c_str(), "\n");
+            printf("command target: %s%s", command_target.c_str(), "\n");
+            printf("command no target: %d%s", (command_target == ""), "\n");
+            printf("command content: %s%s", command_content.c_str(), "\n");
+        }
+
+        if (command_type == "help")
+        {
+            printf("help:\n syntax\t<command type> <target id> <command content>...\n");
+            printf("example:\nprint test_machine hello world\n");
+        }
 
         if (command_type == "execute")
         {
@@ -197,17 +213,12 @@ class blooming_connection
         while (true)
         {
             recv(sock, recv_buffer, 65535, 0);
-            // if (debug_state)
-            // {
-            //     cout << recv_buffer << endl;
-            //     cout << base64_decode(string(recv_buffer)) << endl;
-            // }
 
             if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || (0 == strcmp(last_package, recv_buffer)))
             {
                 if (debug_state)
                 {
-                    cout << "close by remote server: " << (0 == strcmp(recv_buffer, "close")) << endl;
+                    printf("%s %d %s", "close by remote server: ", (0 == strcmp(recv_buffer, "close")), "\n");
                     cout << "close by local exit command: " << (0 == sock_statu) << endl;
                     cout << "close because of something went wrong with connection: " << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
                     if (0 == sock_statu)
@@ -222,7 +233,6 @@ class blooming_connection
 
                 blooming_end();
                 sock_statu = 0;
-                printf(recv_buffer);
                 printf("connection closed\n");
                 std::exit(-1);
             }
