@@ -3,7 +3,6 @@ import threading
 import re
 import sys
 import time
-from typing import final
 from config import *
 import inspect
 import base64
