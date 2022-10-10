@@ -125,6 +125,10 @@ class blooming_connection
             command_content = splited_input_buffer[2];
         }
 
+        cout << command_type << endl;
+        cout << command_target << endl;
+        cout << command_content << endl;
+
         if (command_type == "execute")
         {
         }
@@ -155,38 +159,35 @@ class blooming_connection
         string command;
         while (true)
         {
-            getline(cin, buffer);
 
-            if (0 == buffer.compare("exit") || 0 == sock_statu)
-            {
-                blooming_end();
-                sock_statu = 0;
-                system("sleep 3");
-                std::exit(-1);
-            }
+            blooming_command_formator();
 
-            if (0 == strcmp(buffer.substr(0, 2).c_str(), "fs"))
-            {
-                printf("File stream\n");
-                vector<string> args = str_split_by_space(buffer);
-                if (file_exist(args[1].c_str()))
-                {
-                    string b64_buffer = b64_en((char *)args[1].c_str());
-                    cout << b64_buffer << endl;
-                }
-            }
-            else
-            {
-                buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "test02" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
-            }
+            // getline(cin, buffer);
 
-            // if (debug_state)
+            // if (0 == buffer.compare("exit") || 0 == sock_statu)
             // {
-            //     printf(buffer.c_str());
-            //     printf("\n");
+            //     blooming_end();
+            //     sock_statu = 0;
+            //     system("sleep 3");
+            //     std::exit(-1);
             // }
 
-            send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
+            // if (0 == strcmp(buffer.substr(0, 2).c_str(), "fs"))
+            // {
+            //     printf("File stream\n");
+            //     vector<string> args = str_split_by_space(buffer);
+            //     if (file_exist(args[1].c_str()))
+            //     {
+            //         string b64_buffer = b64_en((char *)args[1].c_str());
+            //         cout << b64_buffer << endl;
+            //     }
+            // }
+            // else
+            // {
+            //     buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "test02" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
+            // }
+
+            // send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
         }
     }
 
