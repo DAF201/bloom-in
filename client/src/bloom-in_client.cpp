@@ -94,13 +94,14 @@ class blooming_connection
         send(sock, head.c_str(), strlen(head.c_str()), 0);
     }
 
-    string *blooming_command_formator()
+    string blooming_command_formator()
     {
         string user_input_buffer;
         string command_type;
         string command_target;
         string command_content;
         string formated_command;
+        string result = "";
 
         getline(cin, user_input_buffer);
 
@@ -133,10 +134,10 @@ class blooming_connection
 
         if (debug_state)
         {
-            printf("command type: %s%s", command_type.c_str(), "\n");
-            printf("command target: %s%s", command_target.c_str(), "\n");
-            printf("command no target: %d%s", (command_target == ""), "\n");
-            printf("command content: %s%s", command_content.c_str(), "\n");
+            printf("command type: %s\n", command_type.c_str());
+            printf("command target: %s\n", command_target.c_str());
+            printf("command no target: %d\n", (command_target == ""));
+            printf("command content: %s\n", command_content.c_str());
         }
 
         if (command_type == "help")
@@ -147,13 +148,16 @@ class blooming_connection
 
         if (command_type == "execute")
         {
+            result = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
+            printf("%s\n", result.c_str());
+            return result;
         }
 
         if (command_type == "fs")
         {
         }
 
-        if (command_type == "dl")
+        if (command_type == "download")
         {
         }
 
@@ -176,8 +180,9 @@ class blooming_connection
         while (true)
         {
 
-            blooming_command_formator();
-
+            string data = blooming_command_formator();
+            cout << data << "\n"
+                 << endl;
             // getline(cin, buffer);
 
             // if (0 == buffer.compare("exit") || 0 == sock_statu)

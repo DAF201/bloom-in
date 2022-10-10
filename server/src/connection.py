@@ -3,6 +3,7 @@ import threading
 import re
 import sys
 import time
+from typing import final
 from config import *
 import inspect
 import base64
@@ -133,8 +134,9 @@ class sub_connection():
         try:
             self.socket.shutdown(socket.SHUT_RDWR)
         except:
-            del self
             pass
+        finally:
+            del self
 
     def __connection_recv(self) -> None:
         '''start recv thread'''
@@ -272,7 +274,7 @@ class sub_connection():
         return result
 
     def __del__(self):
-        print('Destructing')
+        print('connection destructing')
 
 
 def deactivator() -> None:
