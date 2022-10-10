@@ -136,7 +136,7 @@ class sub_connection():
             pass
         finally:
             del self
-            sys.exit()
+            sys.exit(0)
 
     def __connection_recv(self) -> None:
         '''start recv thread'''
@@ -209,7 +209,7 @@ class sub_connection():
             except:
                 pass
             finally:
-                return
+                sys.exit(0)
 
         except Remote_connection_closed as RCC:
             print(RCC)
@@ -218,7 +218,7 @@ class sub_connection():
             except:
                 pass
             finally:
-                return
+                sys.exit(0)
         except Exception as E:
             print(E)
             try:
@@ -226,7 +226,7 @@ class sub_connection():
             except:
                 pass
             finally:
-                return
+                sys.exit(0)
 
     def send(self) -> None:
         '''Get command out of pool and send to client'''
@@ -247,7 +247,7 @@ class sub_connection():
                 except:
                     pass
                 finally:
-                    return
+                    sys.exit(0)
 
     def extractor(self, source: str, pattern: str) -> list:
         '''get data out from raw data, return list of starting position and ending position
