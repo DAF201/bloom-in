@@ -12,9 +12,12 @@ command_pool_manager = threading.Thread(target=connection.deactivator)
 command_pool_manager.start()
 
 # receive connection
+
+connections_pool=[]
+
 while True:
     sock, addr = s.accept()
     sub_connection = threading.Thread(
         target=connection.sub_connection, args=(sock, addr))
     sub_connection.start()
-    sub_connection.join()
+    # sub_connection.join()
