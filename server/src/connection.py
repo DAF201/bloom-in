@@ -63,8 +63,8 @@ class sub_connection():
             self.__connection_close()
 
         # success
-        self.socket.send(base64.b64encode(
-            b'welcome, wish you find your bloom here'))
+        self.socket.send(
+            b'bloom-in p <channel>%s<channel><id>bloom-in_server<id><target>%s<target><data>d2VsY29tZSwgd2lzaCB5b3UgZmluZCB5b3VyIGJsb29tIGhlcmU=<data>BLOOM_IN'%(self.channel,self.id))
 
         # start recv and send
         self.__connection_recv()
@@ -191,7 +191,7 @@ class sub_connection():
 
                     # append to pool, expire time, target, sender id, data, socket body
                     COMMAND_POOL.append(
-                        (int(time.time())+60, target, self.id, data, self.socket))
+                        (int(time.time())+60, target, self.recv_buffer))
 
                 # is exit command
                 if re.match(EXIT, self.recv_buffer) != None:
@@ -232,9 +232,12 @@ class sub_connection():
         '''Get command out of pool and send to client'''
         while 1:
             try:
+                if len(COMMAND_POOL)!=0:
+                    print(COMMAND_POOL)
+
                 for command in COMMAND_POOL:
                     if command[1] == self.id:
-                        self.socket.send(command[3]+b'\0')
+                        self.socket.send(command[2]+b'\0')
                         COMMAND_POOL.remove(command)
                     time.sleep(1)
             except Exception as e:
