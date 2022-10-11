@@ -169,14 +169,17 @@ class blooming_connection
             }
         }
 
-        if (command_type == "download")
+        if (command_type == "dl")
         {
+            result = "bloom-in d <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
         }
 
         if (command_type == "print")
         {
+            result = "bloom-in p <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
         }
         printf("%s\n", result);
+        send(sock, result.c_str(), strlen(result.c_str()), 0);
     }
 
     void blooming_command_analysiser()
