@@ -27,6 +27,8 @@ Worked, sort of (Sorry I am working in lab, the photo quality is not that good, 
 
 damn it, my discrete math is comming
 
+damn it, VSC blowed up.
+
 ---
   
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
