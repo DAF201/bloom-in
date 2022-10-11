@@ -155,6 +155,18 @@ class blooming_connection
 
         if (command_type == "fs")
         {
+            fstream file;
+            file.open(command_content);
+            if (file.is_open())
+            {
+                file.close();
+                result = "bloom-in f <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
+            }
+            else
+            {
+                file.close();
+                result = "bloom-in p <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
+            }
         }
 
         if (command_type == "download")
@@ -164,6 +176,7 @@ class blooming_connection
         if (command_type == "print")
         {
         }
+        printf("%s\n", result);
     }
 
     void blooming_command_analysiser()
