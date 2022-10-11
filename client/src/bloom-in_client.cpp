@@ -147,7 +147,7 @@ class blooming_connection
 
         if (command_type == "execute")
         {
-            result = "bloom-in c <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
+            result = "bloom-in e <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
             return result;
         }
 
@@ -186,6 +186,25 @@ class blooming_connection
 
         command_type = recv_buffer[9];
         cout << recv_buffer << endl;
+
+        switch (command_type)
+        {
+        case 'd':
+            printf("dl\n");
+            break;
+        case 'e':
+            printf("execute\n");
+            break;
+        case 'p':
+            printf("print\n");
+            
+            break;
+        case 'f':
+            printf("file stream");
+            break;
+        default:
+            printf("unknown\n");
+        }
     }
 
     void sock_send()
