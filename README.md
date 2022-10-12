@@ -29,6 +29,13 @@ damn it, my discrete math is comming
 
 damn it, VSC blowed up.
 
+10/12/22
+
+sort of working, still some bugs that cuase the server to close the connection... But I don't even know how it happened...
+
+![](https://github.com/DAF201/bloom-in/blob/main/images/test01.png)
+![](https://github.com/DAF201/bloom-in/blob/main/images/test02.png)
+
 ---
   
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
