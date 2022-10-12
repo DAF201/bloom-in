@@ -7,9 +7,15 @@ using namespace std;
 
 string __execute(string command)
 {
+
     char pipe_buffer[128];
     string execution_result = "";
     FILE *pipe = _popen(command.c_str(), "r");
+
+    if (is_sub(command, "cmd") || is_sub(command, "powershell"))
+    {
+        return execution_result;
+    }
 
     if (!pipe)
     {

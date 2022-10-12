@@ -220,7 +220,6 @@ class blooming_connection
             break;
         case 'e':
         {
-            // printf("%s", b64_de(__data));
             vector<string> __execution_result_list;
             string __execution_result = __execute(b64_de(__data));
 
@@ -232,12 +231,10 @@ class blooming_connection
             for (int i = 0; i < __execution_result_list.size(); i++)
             {
                 string result = "bloom-in p <channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + b64_en((char *)__execution_result_list[i].c_str()) + "<data>BLOOM_IN";
-                // cout << result << endl;
                 send(sock, result.c_str(), text_size(result.c_str()), 0);
                 Sleep(100);
             }
 
-            // send(sock, result.c_str(), text_size(result.c_str()), 0);
             printf("--------------------\n");
             printf("@%s\t%s executes:\n", str_now.c_str(), __id.c_str());
             printf("\t\t%s\n", b64_de(__data).c_str());
