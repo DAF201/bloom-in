@@ -198,6 +198,32 @@ string tag_extractor(TEXT source, TEXT tag)
     return str_source.substr(head + str_tag.size(), tail - head - str_tag.size());
 }
 
+template <typename TEXT_TYPE_1, typename TEXT_TYPE_2>
+string tag_extractor(TEXT_TYPE_1 source, TEXT_TYPE_2 tag)
+{
+    string str_source = string(source);
+    string str_tag = string(tag);
+    string no_found = "";
+
+    if (str_source.size() < str_tag.size())
+    {
+        return no_found;
+    }
+
+    int head = -1;
+    int tail = -1;
+
+    head = str_source.find(str_tag);
+    tail = str_source.find(str_tag, head + str_tag.size());
+
+    if (head == -1 || tail == -1)
+    {
+        return no_found;
+    }
+
+    return str_source.substr(head + str_tag.size(), tail - head - str_tag.size());
+}
+
 // Does not include the last \0
 template <typename TEXT>
 unsigned int text_size(TEXT input_char)
