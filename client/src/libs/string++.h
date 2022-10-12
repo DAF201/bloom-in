@@ -171,7 +171,7 @@ void rm_sub(char *main_str, const char *sub_str)
     strcpy(main_str, str_main.c_str());
 }
 
-// extract the first text between tags
+// extract the text between tags, same input type
 template <typename TEXT>
 string tag_extractor(TEXT source, TEXT tag)
 {
@@ -198,6 +198,7 @@ string tag_extractor(TEXT source, TEXT tag)
     return str_source.substr(head + str_tag.size(), tail - head - str_tag.size());
 }
 
+// extract the first text between tags, different input type
 template <typename TEXT_TYPE_1, typename TEXT_TYPE_2>
 string tag_extractor(TEXT_TYPE_1 source, TEXT_TYPE_2 tag)
 {
