@@ -116,6 +116,12 @@ class blooming_connection
             std::exit(-1);
         }
 
+        if (is_sub(user_input_buffer, (char *)"clear"))
+        {
+            system("CLS");
+            return;
+        }
+
         str_vec splited_input_buffer = str_split_space(user_input_buffer, 2);
         if (1 == splited_input_buffer.size())
         {
