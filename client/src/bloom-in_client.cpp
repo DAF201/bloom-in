@@ -146,11 +146,12 @@ class blooming_connection
         case 'h':
         {
 
-            printf("help:\nsyntax\t<command type> <target id> <command content>...\n"
-                   "command types: e f d p h\n"
-                   "target id: target machine's id\n"
-                   "command content: e:\'shell commmand\' f:\'local file path\' d:\'remote file path\' p:\'text\' h: NONE\n"
-                   "example:\np test_machine hello world\n");
+            printf("\033[40;34mhelp\033[0m:\n\n"
+                   "\033[40;34msyntax\033[0m:\t<command type> <target id> <command content>...\n"
+                   "\033[40;34mcommand types\033[0m: e f d p h\n"
+                   "\033[40;34mtarget id\033[0m: target machine's id\n"
+                   "\033[40;34mcommand contents\033[0m: e:\'shell commmand\' f:\'local file path\' d:\'remote file path\' p:\'text\' h: NONE\n"
+                   "\033[40;34mexample\033[0m:p test_machine hello world\n");
             break;
         }
         case 'e':
