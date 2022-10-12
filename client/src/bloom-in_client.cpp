@@ -3,6 +3,7 @@
 #include <winsock.h>
 #include <string>
 #include <fstream>
+#include <ctime>
 #include ".\libs\string++.h"
 #include ".\libs\b64++.h"
 
@@ -187,6 +188,14 @@ class blooming_connection
         command_type = recv_buffer[9];
         cout << recv_buffer << endl;
 
+        time_t now = time(0);
+        string str_now = ctime(&now);
+
+        string __channel = tag_extractor(recv_buffer, "<channel>");
+        string __id = tag_extractor(recv_buffer, "<id>");
+        string __target = tag_extractor(recv_buffer, "<target>");
+        string __data = tag_extractor(recv_buffer, "<data>");
+
         switch (command_type)
         {
         case 'd':
@@ -196,8 +205,10 @@ class blooming_connection
             printf("execute\n");
             break;
         case 'p':
-            printf("print\n");
-            
+            printf("--------------------\n");
+            printf("@%s\t%s says:\n", str_now.c_str(), __id.c_str());
+            printf("\t\t%s\n", b64_de(__data).c_str());
+            printf("--------------------\n");
             break;
         case 'f':
             printf("file stream");
