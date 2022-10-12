@@ -9,7 +9,7 @@
 #include <fstream>
 #include <type_traits>
 
-#define STRING_NO_FOUND 18446744073709551615
+#define STRING_NO_FOUND -1
 
 using namespace std;
 
@@ -169,6 +169,35 @@ void rm_sub(char *main_str, const char *sub_str)
     rm_sub(str_main, str_sub);
 
     strcpy(main_str, str_main.c_str());
+}
+
+// extract the first text between tags
+template <typename TEXT>
+string tag_extractor(TEXT source, TEXT tag)
+{
+    string str_source = string(source);
+    string str_source_cpy = str_source;
+    string str_tag = string(tag);
+    string no_found = "";
+
+    if (str_source.size() < str_tag.size())
+    {
+        return no_found;
+    }
+
+    int head = 0;
+    int tail = 0;
+
+    head = str_source.find(str_tag);
+
+    tail = str_source.find(str_tag, head + str_tag.size());
+
+    if (head == -1 || tail == -1)
+    {
+        return no_found;
+    }
+
+    return str_source_cpy.substr(head + str_tag.size(), tail - head - str_tag.size());
 }
 
 // Does not include the last \0
