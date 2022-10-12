@@ -98,7 +98,8 @@ class blooming_connection
     string blooming_command_formator()
     {
         string user_input_buffer;
-        string command_type;
+        char command_type;
+        string command_type_identifer = "p";
         string command_target;
         string command_content;
         string formated_command;
@@ -116,13 +117,13 @@ class blooming_connection
         str_vec splited_input_buffer = str_split_space(user_input_buffer, 2);
         if (1 == splited_input_buffer.size())
         {
-            command_type = "help";
+            command_type = 'h';
         }
         else
         {
             try
             {
-                command_type = splited_input_buffer[0];
+                command_type = user_input_buffer[0];
                 command_target = splited_input_buffer[1];
                 command_content = splited_input_buffer[2];
             }
@@ -134,49 +135,81 @@ class blooming_connection
 
         if (debug_state)
         {
-            printf("command type: %s\n", command_type.c_str());
+            printf("command type: %c\n", command_type);
             printf("command target: %s\n", command_target.c_str());
             printf("command no target: %d\n", (command_target == ""));
             printf("command content: %s\n", command_content.c_str());
         }
 
-        if (command_type == "help")
+        switch (command_type)
+        {
+        case 'h':
         {
             printf("help:\n syntax\t<command type> <target id> <command content>...\n");
             printf("example:\nprint test_machine hello world\n");
+            break;
         }
-
-        if (command_type == "execute")
-        {
-            result = "bloom-in e <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
-            return result;
-        }
-
-        if (command_type == "fs")
+        case 'e':
+            break;
+        case 'f':
         {
             fstream file;
             file.open(command_content);
             if (file.is_open())
             {
                 file.close();
-                result = "bloom-in f <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
+                command_type_identifer = "f";
             }
             else
             {
                 file.close();
-                result = "bloom-in p <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
             }
+            break;
+        }
+        case 'd':
+        {
+            command_type_identifer = "d";
+            break;
+        }
+        default:
+        {
+            command_type_identifer = "p";
+            break;
+        }
         }
 
-        if (command_type == "dl")
-        {
-            result = "bloom-in d <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
-        }
+        // if (command_type == 'h')
+        // {
+        //     printf("help:\n syntax\t<command type> <target id> <command content>...\n");
+        //     printf("example:\nprint test_machine hello world\n");
+        // }
 
-        if (command_type == "print")
-        {
-            result = "bloom-in p <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
-        }
+        // if (command_type == 'e')
+        // {
+        //     command_type_identifer = "e";
+        // }
+
+        // if (command_type == 'f')
+        // {
+        //     fstream file;
+        //     file.open(command_content);
+        //     if (file.is_open())
+        //     {
+        //         file.close();
+        //         command_type_identifer = "f";
+        //     }
+        //     else
+        //     {
+        //         file.close();
+        //     }
+        // }
+
+        // if (command_type == 'd')
+        // {
+        //     command_type_identifer = "d";
+        // }
+
+        result = "bloom-in " + command_type_identifer + " <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
         return result;
     }
 
