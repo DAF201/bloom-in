@@ -176,7 +176,6 @@ template <typename TEXT>
 string tag_extractor(TEXT source, TEXT tag)
 {
     string str_source = string(source);
-    string str_source_cpy = str_source;
     string str_tag = string(tag);
     string no_found = "";
 
@@ -185,11 +184,10 @@ string tag_extractor(TEXT source, TEXT tag)
         return no_found;
     }
 
-    int head = 0;
-    int tail = 0;
+    int head = -1;
+    int tail = -1;
 
     head = str_source.find(str_tag);
-
     tail = str_source.find(str_tag, head + str_tag.size());
 
     if (head == -1 || tail == -1)
@@ -197,7 +195,7 @@ string tag_extractor(TEXT source, TEXT tag)
         return no_found;
     }
 
-    return str_source_cpy.substr(head + str_tag.size(), tail - head - str_tag.size());
+    return str_source.substr(head + str_tag.size(), tail - head - str_tag.size());
 }
 
 // Does not include the last \0
