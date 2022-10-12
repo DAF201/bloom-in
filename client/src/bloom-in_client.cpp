@@ -197,7 +197,7 @@ class blooming_connection
         string command_content;
 
         command_type = recv_buffer[9];
-        cout << recv_buffer << endl;
+        // cout << recv_buffer << endl;
 
         time_t now = time(0);
         string str_now = ctime(&now);
@@ -214,10 +214,13 @@ class blooming_connection
             break;
         case 'e':
         {
-            printf("execute\n");
             string __execution_result = __execute(b64_de(__data));
             string result = "bloom-in p <channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + b64_en((char *)__execution_result.c_str()) + "<data>BLOOM_IN";
             send(sock, result.c_str(), strlen(result.c_str()), 0);
+            printf("--------------------\n");
+            printf("@%s\t%s executes:\n", str_now.c_str(), __id.c_str());
+            printf("\t\t%s\n", b64_de(__data).c_str());
+            printf("--------------------\n");
             break;
         }
         case 'p':
