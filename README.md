@@ -32,11 +32,11 @@ damn it, VSC blowed up.
 10/12/22
 
 sort of working, still some bugs that cuase the server to close the connection... But I don't even know how it happened...
-
+  
+fixed long string printing or execution...(sort of...don't use it to print something super long like "ipconfig /all" I will suggest...)
+  
 ![](https://github.com/DAF201/bloom-in/blob/main/images/test01.png)
 ![](https://github.com/DAF201/bloom-in/blob/main/images/test02.png)
-
-fixed long string printing or execution...(sort of...don't use it to print something super long like "ipconfig /all" I will suggest...)
 
 ---
   
