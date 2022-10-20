@@ -193,7 +193,7 @@ class blooming_connection
         }
         if (command_type != 'h')
         {
-            result = "bloom-in " + command_type_identifer + " <channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
+            result = "bloom-in " + command_type_identifer + " <no>-1<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
             send(sock, result.c_str(), text_size(result.c_str()), 0);
         }
     }
@@ -228,10 +228,18 @@ class blooming_connection
                 __execution_result_list.push_back(__execution_result.substr(i, 1024));
             }
 
+            int package_counter = 0;
+
             for (int i = 0; i < __execution_result_list.size(); i++)
             {
-                string result = "bloom-in p <channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + b64_en((char *)__execution_result_list[i].c_str()) + "<data>BLOOM_IN";
+                if (i == __execution_result.size())
+                {
+                    package_counter = -1;
+                }
+
+                string result = "bloom-in p <no>" + to_string(package_counter) + "<no><channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + b64_en((char *)__execution_result_list[i].c_str()) + "<data>BLOOM_IN";
                 send(sock, result.c_str(), text_size(result.c_str()), 0);
+                package_counter++;
                 Sleep(100);
             }
 
