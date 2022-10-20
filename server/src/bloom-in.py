@@ -1,3 +1,4 @@
+from gc import garbage
 import socket
 import threading
 import connection as connection
@@ -11,6 +12,8 @@ s.listen(2)
 command_pool_manager = threading.Thread(target=connection.deactivator)
 command_pool_manager.start()
 
+garbage_collector = threading.Thread(target=connection.garbage_collect)
+garbage_collector.start()
 
 def new_con():
     sock, addr = s.accept()

@@ -5,6 +5,7 @@ import sys
 import time
 from config import *
 import inspect
+import gc
 
 # invaild id
 
@@ -319,3 +320,11 @@ def deactivator() -> None:
             time.sleep(1)
         except Exception as e:
             print(e)
+
+def garbage_collect()->None:
+    while(1):
+        try:
+            gc.collect()
+            time.sleep(5)
+        except:
+            pass
