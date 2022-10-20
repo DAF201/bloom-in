@@ -40,7 +40,7 @@ fixed long string printing or execution...(sort of...don't use it to print somet
 
 10/19/22
 
-the weather goes all the way down from somewhere like 30 to 3... Damn are you sure this is the weather Texas should have?
+the weather goes all the way down from somewhere like 30C to 3C... Damn are you sure this is the weather Texas should have?
 
 ---
   
