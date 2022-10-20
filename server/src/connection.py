@@ -104,6 +104,8 @@ class sub_connection():
             if self.id in ID_POOL:
                 raise ID_Exist_Error("id already exist")
 
+            ID_POOL.add(self.id)
+
             # success, remove timeout
             self.socket.settimeout(None)
 
@@ -149,6 +151,8 @@ class sub_connection():
         # try force close
         try:
             self.socket.shutdown(socket.SHUT_RDWR)
+            if self.id in ID_POOL:
+                ID_POOL.remove(self.id)
         except:
             pass
         finally:
