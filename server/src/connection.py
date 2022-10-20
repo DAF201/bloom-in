@@ -191,7 +191,7 @@ class sub_connection():
 
                     # append to pool, expire time, target, sender id, data, socket body
                     COMMAND_POOL.append(
-                        (int(time.time())+60, target, self.recv_buffer))
+                        (int(time.time())+60, target, self.recv_buffer, self.channel))
 
                 # is exit command
                 if re.match(EXIT, self.recv_buffer) != None:
@@ -236,7 +236,7 @@ class sub_connection():
                     print(COMMAND_POOL)
 
                 for command in COMMAND_POOL:
-                    if command[1] == self.id:
+                    if command[1] == self.id and command[3] == self.channel:
                         self.socket.send(command[2]+b'\0')
                         COMMAND_POOL.remove(command)
                     time.sleep(1)
