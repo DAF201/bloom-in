@@ -5,7 +5,15 @@ import sys
 import time
 from config import *
 import inspect
-import base64
+
+# invaild id
+
+
+class ID_Exist_Error(Exception):
+    '''the id already exist in pool'''
+
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
 # invaild connection header
 
 
@@ -93,11 +101,20 @@ class sub_connection():
             self.channel = self.extractor(self.head, b'<channel>')
             self.channel = self.head[self.channel[0]: self.channel[1]]
 
+            if self.id in ID_POOL:
+                raise ID_Exist_Error("id already exist")
+
             # success, remove timeout
             self.socket.settimeout(None)
 
             # header check success
             return True
+
+        # ID in use
+        except ID_Exist_Error as IEE:
+            print(IEE)
+            self.__connection_close()
+            return False
 
         # protocol error
         except Header_Syntax_Error as HSE:
