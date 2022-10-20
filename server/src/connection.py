@@ -1,3 +1,4 @@
+import base64
 import socket
 import threading
 import re
@@ -103,6 +104,7 @@ class sub_connection():
             self.channel = self.head[self.channel[0]: self.channel[1]]
 
             if self.id in ID_POOL:
+                self.socket.send(b'bloom-in p <channel>%s<channel><id>bloom-in_server<id><target>%s<target><data>aWQgYWxyZWFkeSBleGlzdCwgdHJ5IGFuIGRpZmZlcmVudCBpZCBvciB3YWl0IHVudGlsIHBvb2wgY2xlYXIgdXA=<data>BLOOM_IN'%(self.channel,self.id))
                 raise ID_Exist_Error("id already exist")
 
             ID_POOL.add(self.id)
@@ -151,9 +153,7 @@ class sub_connection():
 
         # try force close
         try:
-            self.socket.shutdown(socket.SHUT_RDWR)
-            if self.id in ID_POOL:
-                ID_POOL.remove(self.id)
+            self.socket.shutdown(socket.SHUT_RDWR)               
         except:
             pass
         finally:
@@ -226,6 +226,8 @@ class sub_connection():
                 if re.match(COMMAND, self.recv_buffer) == None:
                     raise Command_Syntax_Error("invaild protocol syntax")
 
+                garbage_collect()
+
         except Command_Syntax_Error as CSE:
             print(CSE)
             try:
@@ -264,6 +266,7 @@ class sub_connection():
                     if command[1] == self.id and command[3] == self.channel:
                         self.socket.send(command[2]+b'\0')
                         COMMAND_POOL.remove(command)
+                        garbage_collect()
                     time.sleep(1)
             except Exception as e:
 
@@ -302,7 +305,9 @@ class sub_connection():
         return result
 
     def __del__(self):
+        ID_POOL.remove(self.id)
         print('connection destructing')
+        garbage_collect()
 
 
 def deactivator() -> None:
@@ -312,6 +317,7 @@ def deactivator() -> None:
             for command_index in range(len(COMMAND_POOL)):
                 if COMMAND_POOL[command_index][0] < time.time():
                     COMMAND_POOL.pop(command_index)
+                    garbage_collect()
                     # if config["debug"]:
                     #     print("size of command pool: "+str(len(COMMAND_POOL)))
                     #     print(COMMAND_POOL)
@@ -321,10 +327,6 @@ def deactivator() -> None:
         except Exception as e:
             print(e)
 
-def garbage_collect()->None:
-    while(1):
-        try:
-            gc.collect()
-            time.sleep(5)
-        except:
-            pass
+def garbage_collect():
+    print("number of garbage collected: "+ str(gc.collect()))
+    print("triggered from: "+inspect.stack()[1][3])

@@ -1,8 +1,7 @@
-from gc import garbage
 import socket
 import threading
 import connection as connection
-
+import gc
 # TCP socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((connection.config["ip"], connection.config["port"]))
@@ -11,9 +10,6 @@ s.listen(2)
 # deactive expired command
 command_pool_manager = threading.Thread(target=connection.deactivator)
 command_pool_manager.start()
-
-garbage_collector = threading.Thread(target=connection.garbage_collect)
-garbage_collector.start()
 
 def new_con():
     sock, addr = s.accept()
@@ -25,4 +21,5 @@ def new_con():
 # receive connection
 while True:
     new_con()
+    gc.collect()
     # sub_connection.join()

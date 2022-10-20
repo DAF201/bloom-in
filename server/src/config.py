@@ -16,4 +16,4 @@ EXTRACTOR_SYNTAX = (b'<target>', b'<data>', b'<channel>')
 
 ID_POOL:set
 
-ID_POOL = {}
+ID_POOL = set({})
