@@ -182,6 +182,8 @@ class sub_connection():
                     data = self.recv_buffer[extracted_data[1]
                                             [0]: extracted_data[1][1]]
 
+                    channel = self.recv_buffer[extracted_data[2]
+                                            [0]: extracted_data[2][1]]
                     # if config["debug"]:
                     #     print(self.channel, self.id, target, data)
 
@@ -191,7 +193,7 @@ class sub_connection():
 
                     # append to pool, expire time, target, sender id, data, socket body
                     COMMAND_POOL.append(
-                        (int(time.time())+60, target, self.recv_buffer, self.channel))
+                        (int(time.time())+60, target, self.recv_buffer, channel))
 
                 # is exit command
                 if re.match(EXIT, self.recv_buffer) != None:
@@ -236,6 +238,7 @@ class sub_connection():
                     print(COMMAND_POOL)
 
                 for command in COMMAND_POOL:
+                    # match id and channel
                     if command[1] == self.id and command[3] == self.channel:
                         self.socket.send(command[2]+b'\0')
                         COMMAND_POOL.remove(command)
