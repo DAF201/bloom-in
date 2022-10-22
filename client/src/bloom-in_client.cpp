@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <ctime>
+#include <map>
 #include ".\libs\string++.h"
 #include ".\libs\b64++.h"
 #include ".\libs\execute.h"
@@ -167,12 +168,22 @@ class blooming_connection
             break;
         case 'f':
         {
+            // TODO: figure out how to splite file in to chunks and send them.
             fstream file;
+            map<int, char *> file_buffer;
+            char file_chunk_buffer[1024];
+            int file_chunk_counter = 0;
             file.open(command_content);
             if (file.is_open())
             {
-                file.close();
                 command_type_identifer = "f";
+                while (!file.eof())
+                {
+                    file.read(file_chunk_buffer, 1024);
+                    file_buffer.insert(pair<int, char *>(file_chunk_counter, file_chunk_buffer));
+                    file_chunk_counter++;
+                }
+                file.close();
             }
             else
             {
@@ -257,7 +268,7 @@ class blooming_connection
             break;
         case 'f':
             printf("file stream");
-            
+
             break;
         default:
             printf("unknown\n");
