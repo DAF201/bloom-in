@@ -257,6 +257,7 @@ class blooming_connection
             break;
         case 'f':
             printf("file stream");
+            
             break;
         default:
             printf("unknown\n");

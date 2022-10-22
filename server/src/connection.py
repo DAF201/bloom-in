@@ -318,11 +318,6 @@ def deactivator() -> None:
                 if COMMAND_POOL[command_index][0] < time.time():
                     COMMAND_POOL.pop(command_index)
                     garbage_collect()
-                    # if config["debug"]:
-                    #     print("size of command pool: "+str(len(COMMAND_POOL)))
-                    #     print(COMMAND_POOL)
-            # if config["debug"]:
-            #     print("-----------------------------------------------")
             time.sleep(1)
         except Exception as e:
             print(e)
