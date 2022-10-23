@@ -76,6 +76,8 @@ string read_text_file(const char *filename)
 
 file_chunks file_b64_encode(char *file_name)
 {
+    locale loc = locale::global(std::locale(""));
+    
     string file_b64_string = b64_en(file_name);
     file_chunks file_b64_data;
 
@@ -84,7 +86,7 @@ file_chunks file_b64_encode(char *file_name)
         file_b64_data.push_back(b64_en((char *)file_b64_string.substr(i, 1024).c_str()));
     }
 
-    cout << file_b64_data.size() << endl;
+    locale::global(loc);
 
     return file_b64_data;
 }
