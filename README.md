@@ -42,6 +42,10 @@ fixed long string printing or execution...(sort of...don't use it to print somet
 
 the weather goes all the way down from somewhere like 30C to 3C... Damn are you sure this is the weather Texas should have?
 
+10/23/22
+
+trying to make some sort of FTP protocol...
+
 ---
   
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
