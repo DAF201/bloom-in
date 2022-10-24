@@ -170,19 +170,20 @@ class blooming_connection
         case 'f':
         {
             // TODO: figure out how to splite file in to chunks and send them.
-            file_chunks file_chunk_buffer;
-            file_chunk_buffer = file_b64_encode((char *)command_content.c_str());
-
-            if (file_chunk_buffer[0] == "empty")
+            file_chunks file_chunk_b64_buffer;
+            file_chunk_b64_buffer = file_b64_encode((char *)command_content.c_str());
+            if (file_chunk_b64_buffer[0] == "TGx3eGRHVnpkQzV3Ym1jPQ==")
             {
-                printf("Invaild path\n");
+                printf("Invaild file path\n");
                 break;
             }
 
-            for (int i = 0; i < file_chunk_buffer.size(); i++)
+            for (int i = 0; i < file_chunk_b64_buffer.size(); i++)
             {
-                printf("%s", file_chunk_buffer[i]);
+                cout << file_chunk_b64_buffer[i] << endl;
             }
+            command_type = 'h';
+
             break;
         }
         case 'd':
