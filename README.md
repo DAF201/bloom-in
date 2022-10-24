@@ -46,6 +46,10 @@ the weather goes all the way down from somewhere like 30C to 3C... Damn are you 
 
 trying to make some sort of FTP protocol...
 
+10/24/22
+
+testing file chunks
+
 ---
   
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
