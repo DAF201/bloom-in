@@ -22,3 +22,4 @@ config.config
 test.exe
 client/test01.png
 client/test.png
+test.lua
