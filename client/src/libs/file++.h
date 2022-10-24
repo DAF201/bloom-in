@@ -76,8 +76,15 @@ string read_text_file(const char *filename)
 
 file_chunks file_b64_encode(char *file_name)
 {
-    
+
     string file_b64_string = b64_en(file_name);
+    if (file_b64_string.size() == 0)
+    {
+        file_chunks empty;
+        empty.push_back("NULL");
+        return empty;
+    }
+    
     file_chunks file_b64_data;
 
     for (int i = 0; i < file_b64_string.size(); i = i + CHUNK_SIZE)
