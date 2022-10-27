@@ -107,7 +107,6 @@ class blooming_connection
         string command_content;
         string formated_command;
         string result = "";
-        file_chunks file_chunk_b64_buffer;
 
         getline(cin, user_input_buffer);
 
@@ -170,26 +169,7 @@ class blooming_connection
         case 'f':
         {
             // TODO: figure out how to splite file in to chunks and send them.
-            file_chunks file_chunk_buffer;
-            file_chunk_buffer = file_b64_encode((char *)command_content.c_str());
-
-            if (file_chunk_buffer[0] == "empty")
-            {
-                printf("Invaild path\n");
-                break;
-            }
-
-            for (int i = 0; i < file_chunk_buffer.size(); i++)
-            {
-                printf("%s", file_chunk_buffer[i]);
-            }
-
-            Sleep(3);
-            result = "bloom-in " + command_type_identifer + " <no>-1<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>RU9G<data>BLOOM_IN";
-            send(sock, result.c_str(), text_size(result.c_str()), 0);
-
-            file_chunk_b64_buffer.clear();
-
+            command_type = 'h';
             break;
         }
         case 'd':
@@ -232,8 +212,6 @@ class blooming_connection
         string __id = tag_extractor(recv_buffer, "<id>");
         string __target = tag_extractor(recv_buffer, "<target>");
         string __data = tag_extractor(recv_buffer, "<data>");
-
-        file_chunks file_chunk_b64_buffer;
 
         switch (command_type)
         {

@@ -28,11 +28,11 @@ class Header_Syntax_Error(Exception):
 # invaild protocol
 
 
-# class Command_Syntax_Error(Exception):
-#     '''the \'client\' does not provide an vaild command protocol while connecting'''
+class Command_Syntax_Error(Exception):
+    '''the \'client\' does not provide an vaild command protocol while connecting'''
 
-#     def __init__(self, *args: object) -> None:
-#         super().__init__(*args)
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
 
 # connection closed by client
 
@@ -210,8 +210,8 @@ class sub_connection():
                     #     print(self.channel, self.id, target, data)
 
                     # empty package, treate as conection closed
-                    # if data == b'':
-                    #     raise Command_Syntax_Error("invaild protocol syntax")
+                    if data == b'':
+                        raise Command_Syntax_Error("invaild protocol syntax")
 
                     # append to pool, expire time, target, sender id, data, socket body
                     COMMAND_POOL.append(
@@ -223,20 +223,19 @@ class sub_connection():
                         "connection closed by remote")
 
                 # invaild syntax
-                # if re.match(COMMAND, self.recv_buffer) == None:
-                #     print(self.recv_buffer)
-                #     raise Command_Syntax_Error("invaild protocol syntax")
+                if re.match(COMMAND, self.recv_buffer) == None:
+                    raise Command_Syntax_Error("invaild protocol syntax")
 
                 garbage_collect()
 
-        # except Command_Syntax_Error as CSE:
-        #     print(CSE)
-        #     try:
-        #         self.__connection_close()
-        #     except:
-        #         pass
-        #     finally:
-        #         sys.exit(0)
+        except Command_Syntax_Error as CSE:
+            print(CSE)
+            try:
+                self.__connection_close()
+            except:
+                pass
+            finally:
+                sys.exit(0)
 
         except Remote_connection_closed as RCC:
             print(RCC)
