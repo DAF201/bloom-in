@@ -108,6 +108,7 @@ class blooming_connection
         string command_content;
         string formated_command;
         string result = "";
+        file_chunks file_chunk_b64_buffer;
 
         getline(cin, user_input_buffer);
 
@@ -170,19 +171,31 @@ class blooming_connection
         case 'f':
         {
             // TODO: figure out how to splite file in to chunks and send them.
-            file_chunks file_chunk_b64_buffer;
+
             file_chunk_b64_buffer = file_b64_encode((char *)command_content.c_str());
-            if (file_chunk_b64_buffer[0] == "TGx3eGRHVnpkQzV3Ym1jPQ==")
+
+            if (file_chunk_b64_buffer[0] == "NOT A FILE")
             {
-                printf("Invaild file path\n");
+                printf("invaild file path\n");
+                command_type = 'h';
                 break;
             }
 
+            command_type_identifer = 'f';
+            command_type = 'f';
+
             for (int i = 0; i < file_chunk_b64_buffer.size(); i++)
             {
-                cout << file_chunk_b64_buffer[i] << endl;
+                result = "bloom-in " + command_type_identifer + " <no>" + to_string(i) + "<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + file_chunk_b64_buffer[i] + "<data>BLOOM_IN";
+                send(sock, result.c_str(), text_size(result.c_str()), 0);
+                Sleep(2);
             }
-            command_type = 'h';
+
+            Sleep(3);
+            result = "bloom-in " + command_type_identifer + " <no>-1<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>RU9G<data>BLOOM_IN";
+            send(sock, result.c_str(), text_size(result.c_str()), 0);
+
+            file_chunk_b64_buffer.clear();
 
             break;
         }
@@ -197,10 +210,17 @@ class blooming_connection
             break;
         }
         }
+
         if (command_type != 'h')
         {
-            result = "bloom-in " + command_type_identifer + " <no>-1<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
-            send(sock, result.c_str(), text_size(result.c_str()), 0);
+            if (command_type != 'f')
+            {
+                result = "bloom-in " + command_type_identifer + " <no>-1<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
+                send(sock, result.c_str(), text_size(result.c_str()), 0);
+            }
+            else
+            {
+            }
         }
     }
 
@@ -215,9 +235,12 @@ class blooming_connection
         string str_now = ctime(&now);
 
         string __channel = tag_extractor(recv_buffer, "<channel>");
+        string __no = tag_extractor(recv_buffer, "<no>");
         string __id = tag_extractor(recv_buffer, "<id>");
         string __target = tag_extractor(recv_buffer, "<target>");
         string __data = tag_extractor(recv_buffer, "<data>");
+
+        file_chunks file_chunk_b64_buffer;
 
         switch (command_type)
         {
@@ -268,6 +291,7 @@ class blooming_connection
         case 'f':
         {
             printf("file stream");
+            cout << __no << endl;
             break;
         }
         default:

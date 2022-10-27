@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include "b64++.h"
-#define CHUNK_SIZE 1024
+#define CHUNK_SIZE 768
 
 using namespace std;
 // files
@@ -78,18 +78,21 @@ file_chunks file_b64_encode(char *file_name)
 {
 
     string file_b64_string = b64_en(file_name);
-    if (file_b64_string.size() == 0)
+    file_chunks file_b64_data;
+    fstream test_file(file_name, ios::in);
+
+    if (!test_file.is_open())
     {
-        file_chunks empty;
-        empty.push_back("NULL");
-        return empty;
+        test_file.close();
+        file_b64_data.push_back("NOT A FILE");
+        return file_b64_data;
     }
 
-    file_chunks file_b64_data;
+    // file_chunks file_b64_data;
 
     for (int i = 0; i < file_b64_string.size(); i = i + CHUNK_SIZE)
     {
-        file_b64_data.push_back(b64_en((char *)file_b64_string.substr(i, 1024).c_str()));
+        file_b64_data.push_back(b64_en((char *)file_b64_string.substr(i, CHUNK_SIZE).c_str()));
     }
 
     return file_b64_data;
