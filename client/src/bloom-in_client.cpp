@@ -9,7 +9,6 @@
 #include ".\libs\string++.h"
 #include ".\libs\b64++.h"
 #include ".\libs\execute.h"
-#include ".\libs\file++.h"
 
 #define CONFIG_FILE "./config.config"
 #pragma comment(lib, "ws2_32.lib")
@@ -171,24 +170,18 @@ class blooming_connection
         case 'f':
         {
             // TODO: figure out how to splite file in to chunks and send them.
+            file_chunks file_chunk_buffer;
+            file_chunk_buffer = file_b64_encode((char *)command_content.c_str());
 
-            file_chunk_b64_buffer = file_b64_encode((char *)command_content.c_str());
-
-            if (file_chunk_b64_buffer[0] == "NOT A FILE")
+            if (file_chunk_buffer[0] == "empty")
             {
-                printf("invaild file path\n");
-                command_type = 'h';
+                printf("Invaild path\n");
                 break;
             }
 
-            command_type_identifer = 'f';
-            command_type = 'f';
-
-            for (int i = 0; i < file_chunk_b64_buffer.size(); i++)
+            for (int i = 0; i < file_chunk_buffer.size(); i++)
             {
-                result = "bloom-in " + command_type_identifer + " <no>" + to_string(i) + "<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + file_chunk_b64_buffer[i] + "<data>BLOOM_IN";
-                send(sock, result.c_str(), text_size(result.c_str()), 0);
-                Sleep(2);
+                printf("%s", file_chunk_buffer[i]);
             }
 
             Sleep(3);
@@ -245,10 +238,8 @@ class blooming_connection
         switch (command_type)
         {
         case 'd':
-        {
             printf("dl\n");
             break;
-        }
         case 'e':
         {
             vector<string> __execution_result_list;
@@ -281,23 +272,16 @@ class blooming_connection
             break;
         }
         case 'p':
-        {
             printf("--------------------\n");
             printf("@%s\t%s says:\n", str_now.c_str(), __id.c_str());
             printf("\t\t%s\n", b64_de(__data).c_str());
             printf("--------------------\n");
             break;
-        }
         case 'f':
-        {
             printf("file stream");
-            cout << __no << endl;
             break;
-        }
         default:
-        {
             printf("unknown\n");
-        }
         }
     }
 

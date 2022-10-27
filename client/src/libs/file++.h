@@ -76,19 +76,16 @@ string read_text_file(const char *filename)
 
 file_chunks file_b64_encode(char *file_name)
 {
-
+    
     string file_b64_string = b64_en(file_name);
-    file_chunks file_b64_data;
-    fstream test_file(file_name, ios::in);
-
-    if (!test_file.is_open())
+    if (file_b64_string.size() == 0)
     {
-        test_file.close();
-        file_b64_data.push_back("NOT A FILE");
-        return file_b64_data;
+        file_chunks empty;
+        empty.push_back("NULL");
+        return empty;
     }
-
-    // file_chunks file_b64_data;
+    
+    file_chunks file_b64_data;
 
     for (int i = 0; i < file_b64_string.size(); i = i + CHUNK_SIZE)
     {
