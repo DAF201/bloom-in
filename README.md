@@ -46,6 +46,12 @@ the weather goes all the way down from somewhere like 30C to 3C... Damn are you 
 
 trying to make some sort of FTP protocol...
 
+10/26/22
+
+I am sorry for being an idiot. I tried so many ways but I still cannot fix the packages losing issue with File transportation...
+
+![](https://github.com/DAF201/bloom-in/blob/main/images/Screenshot%20(138).png)
+
 ---
   
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
