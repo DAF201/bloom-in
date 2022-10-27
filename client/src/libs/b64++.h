@@ -1,5 +1,3 @@
-#ifndef B64_PLUS_PLUS
-#define B64_PLUS_PLUS
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -10,15 +8,12 @@
 #include "base64.h"
 #include "base64_file.h"
 
-
 using namespace std;
-
 /*
 Credits to owners of base64 funtions, I just make them easier to use
 */
 
 // base64 encode for file or char*
-
 string b64_en(char *source)
 {
 
@@ -47,5 +42,3 @@ string b64_de(string b64_data)
     return base64_decode(b64_data);
 }
 
-
-#endif

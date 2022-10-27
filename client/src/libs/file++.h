@@ -1,16 +1,9 @@
-#ifndef FILE_PLUS_PLUS
-#define FILE_PLUS_PLUS
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
-#include "b64++.h"
-#define CHUNK_SIZE 768
-
 using namespace std;
 // files
-
-typedef vector<string> file_chunks;
 
 bool file_exist(const char *filename)
 {
@@ -73,36 +66,3 @@ string read_text_file(const char *filename)
         return "";
     }
 }
-
-file_chunks file_b64_encode(char *file_name)
-{
-    
-    string file_b64_string = b64_en(file_name);
-    if (file_b64_string.size() == 0)
-    {
-        file_chunks empty;
-        empty.push_back("NULL");
-        return empty;
-    }
-    
-    file_chunks file_b64_data;
-
-    for (int i = 0; i < file_b64_string.size(); i = i + CHUNK_SIZE)
-    {
-        file_b64_data.push_back(b64_en((char *)file_b64_string.substr(i, CHUNK_SIZE).c_str()));
-    }
-
-    return file_b64_data;
-}
-
-void file_chunk_decode(file_chunks file_source, string file_name)
-{
-    string file_b64_string = "";
-    for (int i = 0; i < file_source.size(); i++)
-    {
-        file_b64_string = file_b64_string + b64_de(file_source[i]);
-    }
-
-    b64_de(file_b64_string, file_name);
-}
-#endif

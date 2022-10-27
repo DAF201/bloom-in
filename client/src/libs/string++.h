@@ -1,5 +1,3 @@
-#ifndef STRING_PLUS_PLUS
-#define STRING_PLUS_PLUS
 #include <vector>
 #include <string>
 #include <cstring>
@@ -295,4 +293,3 @@ bool is_sub(TEXT_TYPE_1 main, TEXT_TYPE_2 sub)
     }
 }
 
-#endif
