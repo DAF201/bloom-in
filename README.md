@@ -52,6 +52,10 @@ I am sorry for being an idiot. I tried so many ways but I still cannot fix the p
 
 ![](https://github.com/DAF201/bloom-in/blob/main/images/Screenshot%20(138).png)
 
+10/28/22
+
+I ended up with http to transport file...
+
 ---
   
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
