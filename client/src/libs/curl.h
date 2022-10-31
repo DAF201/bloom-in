@@ -7,6 +7,16 @@
 #include <stdio.h>
 using namespace std;
 
+// example:
+// #include "./src/libs/curl.h"
+// using namespace std;
+// int main()
+// {
+//     vector<string> params;
+//     params.push_back("file_name=test.txt");
+//     _get("http://50.17.163.77:5232/download", params, 1, "./downloads/file.txt");
+// }
+
 string _get(string url, vector<string> params = {}, bool download = 0, string download_path = "../download/file.file")
 {
     try
