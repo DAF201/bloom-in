@@ -64,5 +64,7 @@ def download():
         print(e)
     return {"status": 0}, 200
 
-
+@app.route("/debug", methods=["get","post"])
+def debug():
+    return request.method
 app.run(config["host"], config["port"])
