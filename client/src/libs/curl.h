@@ -6,7 +6,7 @@
 #include "execute.h"
 using namespace std;
 
-string _get(string url, vector<string> params, bool download = 0, string path = "../download/file.file")
+string _get(string url, vector<string> params = {}, bool download = 0, string path = "../download/file.file")
 {
     string cmd;
     if (!download)
@@ -16,8 +16,12 @@ string _get(string url, vector<string> params, bool download = 0, string path = 
         {
             str_params += (params[i] + "&");
         }
-        cmd = "curl.exe " + url + "?" + str_params;
-        cmd.pop_back();
+        cmd = "curl.exe \"" + url + "?" + str_params;
+        if (cmd.back() == '&' || cmd.back() == '?')
+        {
+            cmd.pop_back();
+        }
+        cmd += "\"";
         cout << cmd << endl;
     }
     else
