@@ -41,7 +41,6 @@ string _get(string url, vector<string> params = {}, bool download = 0, string do
             cmd.pop_back();
         }
         cmd += "\"";
-        cout << cmd << endl;
         __execute(cmd);
     }
 }
