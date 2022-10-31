@@ -9,40 +9,52 @@ using namespace std;
 
 string _get(string url, vector<string> params = {}, bool download = 0, string download_path = "../download/file.file")
 {
-    string cmd;
-    if (!download)
+    try
     {
-        string str_params = "";
-        for (int i = 0; i < params.size(); i++)
+        string cmd;
+        if (!download)
         {
-            str_params += (params[i] + "&");
+            string str_params = "";
+            for (int i = 0; i < params.size(); i++)
+            {
+                str_params += (params[i] + "&");
+            }
+            cmd = "curl.exe -o curl_feedback.html \"" + url + "?" + str_params;
+            if (cmd.back() == '&' || cmd.back() == '?')
+            {
+                cmd.pop_back();
+            }
+            cmd += "\"";
+            __execute(cmd);
+            string res = read_text_file("curl_feedback.html");
+            remove("curl_feedback.html");
+            return res;
         }
-        cmd = "curl.exe -o curl_feedback.html \"" + url + "?" + str_params;
-        if (cmd.back() == '&' || cmd.back() == '?')
+        else
         {
-            cmd.pop_back();
+            string str_params = "";
+            for (int i = 0; i < params.size(); i++)
+            {
+                str_params += (params[i] + "&");
+            }
+            cmd = "curl.exe -o " + download_path + " \"" + url + "?" + str_params;
+            if (cmd.back() == '&' || cmd.back() == '?')
+            {
+                cmd.pop_back();
+            }
+            cmd += "\"";
+            __execute(cmd);
+            return download_path;
         }
-        cmd += "\"";
-        __execute(cmd);
-        string res = read_text_file("curl_feedback.html");
-        remove("curl_feedback.html");
-        return res;
     }
-    else
+    catch (...)
     {
-        string str_params = "";
-        for (int i = 0; i < params.size(); i++)
-        {
-            str_params += (params[i] + "&");
-        }
-        cmd = "curl.exe -o " + download_path + " \"" + url + "?" + str_params;
-        if (cmd.back() == '&' || cmd.back() == '?')
-        {
-            cmd.pop_back();
-        }
-        cmd += "\"";
-        __execute(cmd);
+        return "Failed";
     }
+}
+
+string _post(string url, vector<string> params = {}, bool upload = 0)
+{
 }
 
 // upload
