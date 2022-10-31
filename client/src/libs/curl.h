@@ -71,6 +71,18 @@ string _post(string url, vector<string> params = {}, bool upload = 0, string upl
         string cmd;
         if (!upload)
         {
+            string str_params = "";
+            for (int i = 0; i < params.size(); i++)
+            {
+                str_params += (params[i] + "&");
+            }
+            cmd = "curl.exe -X POST \"" + url + "?" + str_params;
+            if (cmd.back() == '&' || cmd.back() == '?')
+            {
+                cmd.pop_back();
+            }
+            cout << cmd << endl;
+            return __execute(cmd);
         }
         else
         {
@@ -90,7 +102,6 @@ string _post(string url, vector<string> params = {}, bool upload = 0, string upl
                 cmd.pop_back();
             }
             cmd = cmd + "\"" + " -F " + "\"file=@" + upload_file_path + "\"";
-            cout << cmd << endl;
             return __execute(cmd);
         }
     }
@@ -102,7 +113,6 @@ string _post(string url, vector<string> params = {}, bool upload = 0, string upl
 
 // upload
 // curl.exe -X POST 'http://50.17.163.77:5232/upload?file_name=test.txt&file_size=1000' -F 'file=@test.txt'
-// curl.exe -X POST "http://50.17.163.77:5232/upload?file_name=./test.txt&file_size=32" -F 'file=@test.txt'
 
 // download
 // curl.exe -o C:\Users\daf20\Downloads\test.txt 'http://50.17.163.77:5232/download?file_name=test.txt'
