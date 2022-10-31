@@ -1,3 +1,5 @@
+#ifndef BASE64_PLUS_PLUS_H
+#define BASE64_PLUS_PLUS_H
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -42,3 +44,4 @@ string b64_de(string b64_data)
     return base64_decode(b64_data);
 }
 
+#endif

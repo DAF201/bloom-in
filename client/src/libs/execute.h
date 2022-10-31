@@ -1,8 +1,10 @@
+#ifndef EXECUTE_H
+#define EXECUTE_H
 #include <iostream>
 #include <string>
 #include <conio.h>
 #include <stdio.h>
-
+#include "string++.h"
 using namespace std;
 
 string __execute(string command)
@@ -31,3 +33,4 @@ string __execute(string command)
     _pclose(pipe);
     return execution_result;
 }
+#endif

@@ -1,3 +1,5 @@
+#ifndef FILE_PLUS_PLUS_H
+#define FILE_PLUS_PLUS_H
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -66,3 +68,4 @@ string read_text_file(const char *filename)
         return "";
     }
 }
+#endif
