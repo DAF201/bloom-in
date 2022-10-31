@@ -10,13 +10,21 @@ using namespace std;
 bool file_exist(const char *filename)
 {
     ifstream file(filename);
-    return file.good();
+    bool res = file.good();
+    file.close();
+    return res;
 }
 
 unsigned long file_size(const char *filename)
 {
-    ifstream file(filename);
-    return file.tellg();
+    if (!file_exist)
+    {
+        return -1;
+    }
+    ifstream file(filename, std::ifstream::ate | std::ifstream::binary);
+    unsigned long res = file.tellg();
+    file.close();
+    return res;
 }
 
 namespace binary_file
