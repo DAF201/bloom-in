@@ -4,6 +4,7 @@
 #include "file++.h"
 #include <iostream>
 #include "execute.h"
+#include <stdio.h>
 using namespace std;
 
 string _get(string url, vector<string> params = {}, bool download = 0, string path = "../download/file.file")
@@ -16,13 +17,15 @@ string _get(string url, vector<string> params = {}, bool download = 0, string pa
         {
             str_params += (params[i] + "&");
         }
-        cmd = "curl.exe \"" + url + "?" + str_params;
+        cmd = "curl.exe -o curl_feedback.html \"" + url + "?" + str_params;
         if (cmd.back() == '&' || cmd.back() == '?')
         {
             cmd.pop_back();
         }
-        cmd += "\"";
-        cout << cmd << endl;
+        __execute(cmd);
+        string res = read_text_file("curl_feedback.html");
+        remove("curl_feedback.html");
+        return res;
     }
     else
     {
