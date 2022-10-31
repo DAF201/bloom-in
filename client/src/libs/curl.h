@@ -7,7 +7,7 @@
 #include <stdio.h>
 using namespace std;
 
-string _get(string url, vector<string> params = {}, bool download = 0, string path = "../download/file.file")
+string _get(string url, vector<string> params = {}, bool download = 0, string download_path = "../download/file.file")
 {
     string cmd;
     if (!download)
@@ -22,6 +22,7 @@ string _get(string url, vector<string> params = {}, bool download = 0, string pa
         {
             cmd.pop_back();
         }
+        cmd += "\"";
         __execute(cmd);
         string res = read_text_file("curl_feedback.html");
         remove("curl_feedback.html");
@@ -29,6 +30,19 @@ string _get(string url, vector<string> params = {}, bool download = 0, string pa
     }
     else
     {
+        string str_params = "";
+        for (int i = 0; i < params.size(); i++)
+        {
+            str_params += (params[i] + "&");
+        }
+        cmd = "curl.exe -o " + download_path + " \"" + url + "?" + str_params;
+        if (cmd.back() == '&' || cmd.back() == '?')
+        {
+            cmd.pop_back();
+        }
+        cmd += "\"";
+        cout << cmd << endl;
+        __execute(cmd);
     }
 }
 
