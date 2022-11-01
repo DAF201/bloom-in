@@ -1,31 +1,33 @@
 #!/bin/bash
-# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
-#
-# It is highly advisable to create own systemd services or udev rules
-# to run scripts during boot instead of using this file.
-#
-# In contrast to previous versions due to parallel execution during boot
-# this script will NOT be run after all other services.
-#
-# Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure
-# that this script will be executed during boot.
+# this don't work at all
 
-touch /var/lock/subsys/local
+# # THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
+# #
+# # It is highly advisable to create own systemd services or udev rules
+# # to run scripts during boot instead of using this file.
+# #
+# # In contrast to previous versions due to parallel execution during boot
+# # this script will NOT be run after all other services.
+# #
+# # Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure
+# # that this script will be executed during boot.
 
-while true; do
+# touch /var/lock/subsys/local
 
-    for pid in $(ps -ef | grep python3 | awk '{print $2}'); do
+# while true; do
 
-        kill -9 $pid
+#     for pid in $(ps -ef | grep python3 | awk '{print $2}'); do
 
-    done
+#         kill -9 $pid
 
-    cd ~
+#     done
 
-    python3 /home/ec2-user/bloom-in/bloom-in.py &
+#     cd ~
 
-    python3 /home/ec2-user/bloom-in/file.py &
+#     python3 /home/ec2-user/bloom-in/bloom-in.py &
 
-    sleep 15m
+#     python3 /home/ec2-user/bloom-in/file.py &
 
-#done
+#     sleep 15m
+
+# #done
