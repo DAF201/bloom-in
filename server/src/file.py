@@ -49,7 +49,7 @@ def download():
         file_name = args["file_name"]
         if platform.system() == "Linux":
             return (
-                send_file(file_name, as_attachment=True),
+                send_file("../" + file_name, as_attachment=True),
                 200,
             )
         else:
@@ -64,7 +64,20 @@ def download():
         print(e)
     return {"status": 0}, 200
 
-@app.route("/debug", methods=["get","post"])
+
+@app.route("/debug", methods=["get", "post", "delete", "patch", "put", "head"])
 def debug():
-    return request.method
+    try:
+        if request.method == 'POST':
+            args = request.args
+            if ('method') in args.keys() and ('file_name') in args.keys():
+                if args['method'] == 'delete':
+                    os.remove("../"+args['file_name'])
+                    return args['file_name']
+        return request.method
+    except Exception as e:
+        print(e)
+        return ""
+
+
 app.run(config["host"], config["port"])

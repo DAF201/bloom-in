@@ -173,12 +173,12 @@ class blooming_connection
             break;
         case 'f':
         {
-            statu_code = 0; // require_command:0 upload_success: 1 upload_failed: -1
             command_type_identifer = 'f';
             break;
         }
         case 'd':
         {
+            statu_code = 0; // require_command:0 upload_success: 1 upload_failed: -1
             command_type_identifer = "d";
             break;
         }
@@ -225,7 +225,57 @@ class blooming_connection
         switch (command_type)
         {
         case 'd':
-            printf("dl\n");
+            if (__no == "0")
+            {
+                if (debug_state)
+                {
+                    printf("\n%s is requesting file:@%s\n", __id.c_str(), b64_de(__data).c_str());
+                }
+
+                vector<string> param;
+                param.push_back("file_name=" + b64_de(__data));
+                param.push_back("file_size=" + to_string(file_size(b64_de(__data).c_str())));
+
+                int upload_status = -1;
+
+                string response = _post("http://" + server_ip + ":5232/upload", param, true, b64_de(__data));
+
+                if (debug_state)
+                {
+                    printf("%s", response.c_str());
+                }
+
+                if (is_sub(response, "1"))
+                {
+                    upload_status = 1;
+                }
+
+                string result = "bloom-in d <no>" + to_string(upload_status) + "<no><channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + __data + "<data>BLOOM_IN";
+                send(sock, result.c_str(), text_size(result.c_str()), 0);
+            }
+            if (__no == "1")
+            {
+                vector<string> param;
+                param.push_back("file_name=" + b64_de(__data));
+                string response = _get("http://" + server_ip + ":5232/download", param, true, "./downloads/" + b64_de(__data));
+
+                if (is_sub(response, "0"))
+                {
+                    printf("File download failed\n");
+                    break;
+                }
+
+                string result = "bloom-in d <no>2<no><channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + __data + "<data>BLOOM_IN";
+                send(sock, result.c_str(), text_size(result.c_str()), 0);
+            }
+            if (__no == "2")
+            {
+                cout << "target recieved file" << endl;
+            }
+            if (__no == "-1")
+            {
+                cout << "error" << endl;
+            }
             break;
         case 'e':
         {
@@ -265,42 +315,7 @@ class blooming_connection
             printf("--------------------\n");
             break;
         case 'f':
-            if (__no == "0")
-            {
-                if (debug_state)
-                {
-                    printf("\n%s is requesting file:@%s\n", __id.c_str(), b64_de(__data).c_str());
-                }
 
-                vector<string> param;
-                param.push_back("file_name=" + b64_de(__data));
-                param.push_back("file_size=" + to_string(file_size(b64_de(__data).c_str())));
-
-                string response = _post("http://" + server_ip + ":5232/upload", param, true, b64_de(__data));
-
-                if (debug_state)
-                {
-                    printf("%s", response.c_str());
-                }
-
-                int upload_status = 1;
-                if (is_sub(response, "0"))
-                {
-                    upload_status = 0;
-                }
-
-                string result = "bloom-in f <no>" + to_string(upload_status) + "<no><channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + __data + "<data>BLOOM_IN";
-
-                send(sock, result.c_str(), text_size(result.c_str()), 0);
-            }
-            if (__no == "1")
-            {
-                cout << "send" << endl;
-            }
-            if (__no == "-1")
-            {
-                cout << "error" << endl;
-            }
             break;
         default:
             printf("unknown\n");
