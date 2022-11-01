@@ -270,11 +270,46 @@ class blooming_connection
             }
             if (__no == "2")
             {
-                cout << "target recieved file" << endl;
+                if (debug_state)
+                {
+                    printf("target recieved file\n");
+                }
+
+                vector<string> param;
+                param.push_back("file_name=" + b64_de(__data));
+                param.push_back("method=delete");
+                string response = _post("http://" + server_ip + ":5232/debug", param);
+                if (debug_state)
+                {
+                    if (response == b64_de(__data))
+                    {
+                        printf("server clean up success\n");
+                    }
+                    else
+                    {
+                        printf("server clean up failed\n");
+                    }
+                }
             }
             if (__no == "-1")
             {
-                cout << "error" << endl;
+                printf("error occurred when file transport\n");
+
+                vector<string> param;
+                param.push_back("file_name=" + b64_de(__data));
+                param.push_back("method=delete");
+                string response = _post("http://" + server_ip + ":5232/debug", param);
+                if (debug_state)
+                {
+                    if (response == b64_de(__data))
+                    {
+                        printf("server clean up success\n");
+                    }
+                    else
+                    {
+                        printf("server clean up failed\n");
+                    }
+                }
             }
             break;
         case 'e':

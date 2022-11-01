@@ -114,16 +114,6 @@ string _post(string url, vector<string> params = {}, bool upload = 0, string upl
     }
 }
 
-string _delete(string url, vector<string> params)
-{
-    try
-    {
-    }
-    catch (...)
-    {
-    }
-}
-
 // upload
 // curl.exe -X POST 'http://50.17.163.77:5232/upload?file_name=test.txt&file_size=1000' -F 'file=@test.txt'
 
