@@ -56,6 +56,10 @@ I am sorry for being an idiot. I tried so many ways but I still cannot fix the p
 
 I ended up with http to transport file...
 
+11/01/22
+
+the first release is ready, file transportation is up.
+
 ---
   
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
