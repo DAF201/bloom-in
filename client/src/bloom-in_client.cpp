@@ -173,12 +173,17 @@ class blooming_connection
             break;
         case 'f':
         {
+            statu_code = 0; // uploading:0 upload_success: 1 upload_failed: -1 download_success: 2
             command_type_identifer = 'f';
+            vector<string> param;
+            param.push_back("file_name=" + command_content);
+            param.push_back("file_size=" + to_string(file_size(command_content.c_str())));
+            string response = _post("http://" + server_ip + ":5232/upload", param, true, command_content);
             break;
         }
         case 'd':
         {
-            statu_code = 0; // require_command:0 upload_success: 1 upload_failed: -1
+            statu_code = 0; // require_command:0 upload_success: 1 upload_failed: -1 download_success: 2
             command_type_identifer = "d";
             break;
         }
@@ -242,7 +247,7 @@ class blooming_connection
 
                 if (debug_state)
                 {
-                    printf("%s", response.c_str());
+                    printf("%s\n", response.c_str());
                 }
 
                 if (is_sub(response, "1"))
@@ -350,8 +355,73 @@ class blooming_connection
             printf("--------------------\n");
             break;
         case 'f':
+        {
+            try
+            {
+                if (__no == "0")
+                {
+                    if (debug_state)
+                    {
+                        printf("\n%s is sending file: @%s\n", __id.c_str(), b64_de(__data).c_str());
+                    }
 
-            break;
+                    int download_status = -1;
+                    vector<string> param;
+                    param.push_back("file_name=" + b64_de(__data));
+                    string response = _get("http://" + server_ip + ":5232/download", param, true, "./downloads/" + b64_de(__data));
+
+                    if (debug_state)
+                    {
+                        cout << response << endl;
+                    }
+
+                    if (file_exist(response.c_str()))
+                    {
+                        download_status = 1;
+                    }
+                    string result = "bloom-in f <no>" + to_string(download_status) + "<no><channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + __data + "<data>BLOOM_IN";
+                    send(sock, result.c_str(), text_size(result.c_str()), 0);
+                }
+                if (__no == "1")
+                {
+                    if (debug_state)
+                    {
+                        printf("\n%s has finished file download: @%s\n", __id.c_str(), b64_de(__data).c_str());
+                    }
+                    string result = "bloom-in f <no>2<no><channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + __data + "<data>BLOOM_IN";
+                    send(sock, result.c_str(), text_size(result.c_str()), 0);
+                }
+                if (__no == "-1")
+                {
+                    printf("error occurred when file transport\n");
+                    string result = "bloom-in f <no>2<no><channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + __data + "<data>BLOOM_IN";
+                    send(sock, result.c_str(), text_size(result.c_str()), 0);
+                }
+                if (__no == "2")
+                {
+                    vector<string> param;
+                    param.push_back("file_name=" + b64_de(__data));
+                    param.push_back("method=delete");
+                    string response = _post("http://" + server_ip + ":5232/debug", param);
+                    if (debug_state)
+                    {
+                        if (response == b64_de(__data))
+                        {
+                            printf("server clean up success\n");
+                        }
+                        else
+                        {
+                            printf("server clean up failed\n");
+                        }
+                    }
+                }
+                break;
+            }
+            catch (...)
+            {
+            }
+        }
+
         default:
             printf("unknown\n");
         }
