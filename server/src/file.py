@@ -72,7 +72,11 @@ def debug():
             args = request.args
             if ('method') in args.keys() and ('file_name') in args.keys():
                 if args['method'] == 'delete':
-                    os.remove("../"+args['file_name'])
+                    try:
+                        os.remove("../"+args['file_name'])
+                        os.remove(args['file_name'])
+                    except:
+                        pass
                     return args['file_name']
         return request.method
     except Exception as e:
