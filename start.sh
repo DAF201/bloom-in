@@ -16,9 +16,9 @@ while true; do
 
     cd ~
 
-    nohup python3 bloom-in/bloom-in.py
+    nohup python3 bloom-in/bloom-in.py &
 
-    nohup python3 bloom-in/file.py
+    nohup python3 bloom-in/file.py &
 
     sleep 15m
 
