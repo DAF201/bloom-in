@@ -16,20 +16,26 @@ Credits to owners of base64 funtions, I just make them easier to use
 */
 
 // base64 encode for file or char*
-string b64_en(char *source)
+string b64_en(char *source, bool is_file = 1)
 {
+    if (is_file)
+    {
+        fstream file_stream;
+        file_stream.open(source);
 
-    fstream file_stream;
-    file_stream.open(source);
+        if (!file_stream.is_open())
+        {
+            return base64_encode(string(source));
+        }
 
-    if (!file_stream.is_open())
+        file_stream.close();
+
+        return Base64::encodeFromFile(source);
+    }
+    else
     {
         return base64_encode(string(source));
     }
-
-    file_stream.close();
-
-    return Base64::encodeFromFile(source);
 }
 
 // decode file

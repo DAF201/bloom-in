@@ -9,6 +9,7 @@
 #include ".\libs\string++.h"
 #include ".\libs\b64++.h"
 #include ".\libs\execute.h"
+#include ".\libs\curl.h"
 
 #define CONFIG_FILE "./config.config"
 #pragma comment(lib, "ws2_32.lib")
@@ -82,6 +83,9 @@ class blooming_connection
     string local_id;
     string channel;
 
+    string server_ip;
+    string server_port;
+
     char recv_buffer[65535];
     char send_buffer[65535];
 
@@ -107,6 +111,7 @@ class blooming_connection
         string command_content;
         string formated_command;
         string result = "";
+        int statu_code = -1;
 
         getline(cin, user_input_buffer);
 
@@ -168,8 +173,8 @@ class blooming_connection
             break;
         case 'f':
         {
-            // TODO: figure out how to splite file in to chunks and send them.
-            command_type = 'h';
+            statu_code = 0; // require_command:0 upload_success: 1 upload_failed: -1
+            command_type_identifer = 'f';
             break;
         }
         case 'd':
@@ -184,16 +189,20 @@ class blooming_connection
         }
         }
 
+        string content_buffer;
+        if (statu_code != 0)
+        {
+            content_buffer = b64_en((char *)command_content.c_str());
+        }
+        else
+        {
+            content_buffer = b64_en((char *)command_content.c_str(), false);
+        }
+
         if (command_type != 'h')
         {
-            if (command_type != 'f')
-            {
-                result = "bloom-in " + command_type_identifer + " <no>-1<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + b64_en((char *)command_content.c_str()) + "<data>BLOOM_IN";
-                send(sock, result.c_str(), text_size(result.c_str()), 0);
-            }
-            else
-            {
-            }
+            result = "bloom-in " + command_type_identifer + " <no>" + to_string(statu_code) + "<no><channel>" + channel + "<channel><id>" + local_id + "<id>" + "<target>" + command_target + "<target>" + "<data>" + content_buffer + "<data>BLOOM_IN";
+            send(sock, result.c_str(), text_size(result.c_str()), 0);
         }
     }
 
@@ -256,7 +265,42 @@ class blooming_connection
             printf("--------------------\n");
             break;
         case 'f':
-            printf("file stream");
+            if (__no == "0")
+            {
+                if (debug_state)
+                {
+                    printf("\n%s is requesting file:@%s\n", __id.c_str(), b64_de(__data).c_str());
+                }
+
+                vector<string> param;
+                param.push_back("file_name=" + b64_de(__data));
+                param.push_back("file_size=" + to_string(file_size(b64_de(__data).c_str())));
+
+                string response = _post("http://" + server_ip + ":5232/upload", param, true, b64_de(__data));
+
+                if (debug_state)
+                {
+                    printf("%s", response.c_str());
+                }
+
+                int upload_status = 1;
+                if (is_sub(response, "0"))
+                {
+                    upload_status = 0;
+                }
+
+                string result = "bloom-in f <no>" + to_string(upload_status) + "<no><channel>" + __channel + "<channel><id>" + local_id + "<id>" + "<target>" + __id + "<target>" + "<data>" + __data + "<data>BLOOM_IN";
+
+                send(sock, result.c_str(), text_size(result.c_str()), 0);
+            }
+            if (__no == "1")
+            {
+                cout << "send" << endl;
+            }
+            if (__no == "-1")
+            {
+                cout << "error" << endl;
+            }
             break;
         default:
             printf("unknown\n");
@@ -322,6 +366,8 @@ public:
     {
         local_id = config.id;
         channel = config.token;
+        server_ip = config.IP;
+        server_port = to_string(config.port);
 
         head = "bloom-in protocol " + config.protocol_version + " <channel>" + config.token + "<channel> <id>" + config.id + "<id> BLOOM_IN";
         exit = "bloom-in exit " + config.protocol_version + " <exit><id>" + config.id + "<id><exit> BLOOM_IN";

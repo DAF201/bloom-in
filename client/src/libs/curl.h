@@ -30,15 +30,16 @@ string _get(string url, vector<string> params = {}, bool download = 0, string do
             {
                 str_params += (params[i] + "&");
             }
-            cmd = "curl.exe -o curl_feedback.html \"" + url + "?" + str_params;
+            cmd = "curl.exe -o curl_response.html \"" + url + "?" + str_params;
             if (cmd.back() == '&' || cmd.back() == '?')
             {
                 cmd.pop_back();
             }
             cmd += "\"";
             __execute(cmd);
-            string res = read_text_file("curl_feedback.html");
-            remove("curl_feedback.html");
+            string res = read_text_file("curl_response.html");
+            remove("curl_response.html");
+            cout << cmd << endl;
             return res;
         }
         else
@@ -55,6 +56,7 @@ string _get(string url, vector<string> params = {}, bool download = 0, string do
             }
             cmd += "\"";
             __execute(cmd);
+            cout << cmd << endl;
             return download_path;
         }
     }
@@ -102,6 +104,7 @@ string _post(string url, vector<string> params = {}, bool upload = 0, string upl
                 cmd.pop_back();
             }
             cmd = cmd + "\"" + " -F " + "\"file=@" + upload_file_path + "\"";
+            cout << cmd << endl;
             return __execute(cmd);
         }
     }
