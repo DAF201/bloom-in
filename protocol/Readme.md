@@ -79,3 +79,24 @@ base64 data chunk, max size 1024 (oversize message will be chopped into 1024 cha
 [BLOOM_IN]
 protocol tail
 ```  
+
+### exit protocol
+
+enter exit to exit
+
+```
+# exit protocol
+bloom-in exit V* <exit><id>*<id><exit> BLOOM_IN
+
+[bloom-in exit]
+protocol head
+
+[V*]
+protocol version
+
+[<exit><id>*<id><exit>]
+protocol body with client id
+
+[BLOOM_IN]
+protocol tail
+```
