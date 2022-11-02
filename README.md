@@ -4,6 +4,8 @@
 
 my new toy to connect two pcs in two different private networks (which is basically some sort of "Implementation" of ["blur-in"](https://github.com/DAF201/blur-in))
 
+About protocol, see [this](https://github.com/DAF201/bloom-in/tree/main/protocol)
+
 ### Important things to know about
 
 1. DON'T USE IT FOR PRODUCTION ENV, the protocol is not encrypted at all (it is not even binary)
