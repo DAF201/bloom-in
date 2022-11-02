@@ -103,12 +103,12 @@ class sub_connection():
             self.channel = self.extractor(self.head, b'<channel>')
             self.channel = self.head[self.channel[0]: self.channel[1]]
 
-            if self.channel + b'/' + self.id in ID_POOL:
+            if self.id in ID_POOL:
                 self.socket.send(
                     b'bloom-in p <channel>%s<channel><id>bloom-in_server<id><target>%s<target><data>aWQgYWxyZWFkeSBleGlzdCwgdHJ5IGFuIGRpZmZlcmVudCBpZCBvciB3YWl0IHVudGlsIHBvb2wgY2xlYXIgdXA=<data>BLOOM_IN' % (self.channel, self.id))
                 raise ID_Exist_Error("id already exist")
 
-            ID_POOL.add(self.channel + b'/' + self.id)
+            ID_POOL.add(self.id)
 
             # success, remove timeout
             self.socket.settimeout(None)
