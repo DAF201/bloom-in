@@ -60,26 +60,18 @@ status code, express the current progress.
 
 example: test01 want to upload a file to test02
 command 1(test01 to test02): ...<no>0<no>... (request to upload a file)
-...
-test02 do something
-...
+#test02 do something
 command 2(test02 to test01): ...<no>1/-1<no>... (file download success or fail)
-...
-test01 do something
-...
+#test01 do something
 command 3(test01 to test02): ...<no>2<no>... (clean up)
 
 'e': {0: file download request, 1: file upload success, -1: file upload fail, 2: file transportation finished, clean up request}
 
 example: test01 want to download a file from test02
 command 1(test01 to test02): ...<no>0<no>... (request to download a file)
-...
-test02 do something
-...
+#test02 do something
 command 2(test02 to test01): ...<no>1/-1<no>... (file upload success or fail)
-...
-test01 do something
-...
+#test01 do something
 command 3(test01 to test02): ...<no>2<no>... (clean up)
 
 [<channel>*<channel>]
