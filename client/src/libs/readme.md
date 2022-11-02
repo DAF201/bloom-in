@@ -4,4 +4,4 @@
 
 - professor?(I assume) Jim Fawcett of Syracuse University, I found those on the university "warehouse". https://ecs.syr.edu/faculty/fawcett/handouts/CSE687/code/Base64Encoding/
 
-- The string++.h is mine...
+- remains are mine
