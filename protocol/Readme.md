@@ -13,7 +13,7 @@ bloom-in exit V* <exit><id>*<id><exit> BLOOM_IN
 
 ### init protocol
 
-To start the connection, the client need to send a start message to server with its channel(token) and its id, then the server will register to pool and start forwarding to client. Otherwise, the servier will close the connection.
+To start the connection, the client need to send a start message to server with its channel(token) and its id, then the server will register to pool and start forwarding to client. Otherwise, the servier will close the connection
 
 ```
 # init protocol
@@ -46,7 +46,7 @@ bloom-in * <no>*<no><channel>*<channel><id>*<id><target>*<target><data>*<data>BL
 protocol head
 
 [*]
-single char type identifier, possible value = {p, e, f, d}, there is another identifier 'h' which is local and will never be sent out.
+single char type identifier, possible value = {p, e, f, d}, there is another identifier 'h' which is local
 
 'p': print
 'e': execute
@@ -61,12 +61,14 @@ status code, express the current progress.
 example: test01 want to upload a file to test02
 command 1(test01 to test02): ...<no>0<no>... (request to upload a file)
 command 2(test02 to test01): ...<no>1/-1<no>... (file download success or fail)
-command 3(test01 to test02): ...<no>2<no>... (clean up request)
+command 3(test01 to test02): ...<no>2<no>... (clean up)
 
 'e': {0: file download request, 1: file upload success, -1: file upload fail, 2: file transportation finished, clean up request}
 
 example: test01 want to download a file from test02
 command 1(test01 to test02): ...<no>0<no>... (request to download a file)
 command 2(test02 to test01): ...<no>1/-1<no>... (file upload success or fail)
-command 3(test01 to test02): ...<no>2<no>... (clean up request)
+command 3(test01 to test02): ...<no>2<no>... (clean up)
 ```
+[<channel>*<channel>]
+where the messages being sent to. Target can receive your messages/commands if and only if your are at the same channel
