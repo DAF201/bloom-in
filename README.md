@@ -3,6 +3,19 @@
 ## What is this?
 
 my new toy to connect two pcs in two different private networks (which is basically some sort of "Implementation" of ["blur-in"](https://github.com/DAF201/blur-in))
+
+### Important things to know about
+
+1. DON'T USE IT FOR PRODUCTION ENV, the protocol is not encrypted at all (it is not even binary)
+
+2. The protocol is UDP like, it may miss some messages/commands
+
+3. There are many better solutions for file transportation than this toy existing in the world
+
+4. The performance of it follows "Buckets effect", if one pc is poor, the other one is good, the over all will perform poorly
+
+5. The server is designed for small number of client to use at same time
+
 ---
 
 09/15/22
