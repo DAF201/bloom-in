@@ -74,7 +74,7 @@ class sub_connection():
 
         # success
         self.socket.send(
-            b'bloom-in p <channel>%s<channel><id>bloom-in_server<id><target>%s<target><data>d2VsY29tZSwgd2lzaCB5b3UgZmluZCB5b3VyIGJsb29tIGhlcmU=<data>BLOOM_IN'%(self.channel,self.id))
+            b'bloom-in p <channel>%s<channel><id>bloom-in_server<id><target>%s<target><data>d2VsY29tZSwgd2lzaCB5b3UgZmluZCB5b3VyIGJsb29tIGhlcmU=<data>BLOOM_IN' % (self.channel, self.id))
 
         # start recv and send
         self.__connection_recv()
@@ -103,11 +103,12 @@ class sub_connection():
             self.channel = self.extractor(self.head, b'<channel>')
             self.channel = self.head[self.channel[0]: self.channel[1]]
 
-            if self.id in ID_POOL:
-                self.socket.send(b'bloom-in p <channel>%s<channel><id>bloom-in_server<id><target>%s<target><data>aWQgYWxyZWFkeSBleGlzdCwgdHJ5IGFuIGRpZmZlcmVudCBpZCBvciB3YWl0IHVudGlsIHBvb2wgY2xlYXIgdXA=<data>BLOOM_IN'%(self.channel,self.id))
+            if self.channel + b'/' + self.id in ID_POOL:
+                self.socket.send(
+                    b'bloom-in p <channel>%s<channel><id>bloom-in_server<id><target>%s<target><data>aWQgYWxyZWFkeSBleGlzdCwgdHJ5IGFuIGRpZmZlcmVudCBpZCBvciB3YWl0IHVudGlsIHBvb2wgY2xlYXIgdXA=<data>BLOOM_IN' % (self.channel, self.id))
                 raise ID_Exist_Error("id already exist")
 
-            ID_POOL.add(self.id)
+            ID_POOL.add(self.channel + b'/' + self.id)
 
             # success, remove timeout
             self.socket.settimeout(None)
@@ -153,7 +154,7 @@ class sub_connection():
 
         # try force close
         try:
-            self.socket.shutdown(socket.SHUT_RDWR)               
+            self.socket.shutdown(socket.SHUT_RDWR)
         except:
             pass
         finally:
@@ -205,7 +206,7 @@ class sub_connection():
                                             [0]: extracted_data[1][1]]
 
                     channel = self.recv_buffer[extracted_data[2]
-                                            [0]: extracted_data[2][1]]
+                                               [0]: extracted_data[2][1]]
                     # if config["debug"]:
                     #     print(self.channel, self.id, target, data)
 
@@ -258,7 +259,7 @@ class sub_connection():
         '''Get command out of pool and send to client'''
         while 1:
             try:
-                if len(COMMAND_POOL)!=0:
+                if len(COMMAND_POOL) != 0:
                     print(COMMAND_POOL)
 
                 for command in COMMAND_POOL:
@@ -312,7 +313,7 @@ class sub_connection():
 
 def deactivator() -> None:
     '''deactive the expired command, each command will last 60s at most'''
-    while(1):
+    while (1):
         try:
             for command_index in range(len(COMMAND_POOL)):
                 if COMMAND_POOL[command_index][0] < time.time():
@@ -322,6 +323,7 @@ def deactivator() -> None:
         except Exception as e:
             print(e)
 
+
 def garbage_collect():
-    print("number of garbage collected: "+ str(gc.collect()))
+    print("number of garbage collected: " + str(gc.collect()))
     print("triggered from: "+inspect.stack()[1][3])
