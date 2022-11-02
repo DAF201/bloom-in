@@ -34,7 +34,7 @@ user id, to identify a client, edit in client's config.config
 [BLOOM_IN]
 protocol tail
 ```
-# message/control protocol
+### message/control protocol
 
 Message and command carriage protocol, sady it does not has any encryption and it is plain text
 
