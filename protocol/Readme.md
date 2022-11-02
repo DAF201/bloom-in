@@ -69,6 +69,13 @@ example: test01 want to download a file from test02
 command 1(test01 to test02): ...<no>0<no>... (request to download a file)
 command 2(test02 to test01): ...<no>1/-1<no>... (file upload success or fail)
 command 3(test01 to test02): ...<no>2<no>... (clean up)
-```
+
 [<channel>*<channel>]
-where the messages being sent to. Target can receive your messages/commands if and only if your are at the same channel
+where the messages being sent to. Target can receive your messages/commands if and only if you and target are at the same channel
+
+[<data>*<data>]
+base64 data chunk, max size 1024 (oversize message will be chopped into 1024 chars packages and send out)
+
+[BLOOM_IN]
+protocol tail
+```  
