@@ -77,7 +77,7 @@ the first release is ready, file transportation is up.
 
 11/04/22
 
-I was trying to use this as a port to reach company's other pcs but it don't looks like it can lol, cause it cannot enter password. 
+I was trying to use this as a port to reach company's other pcs at begining but it don't looks like it can lol, cause it cannot enter password. 
 
 ---
   
