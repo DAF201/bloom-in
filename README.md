@@ -75,6 +75,10 @@ I ended up with http to transport file...
 
 the first release is ready, file transportation is up.
 
+11/04/22
+
+I was trying to use this as a port to reach company's other pcs but it don't looks like it can lol, cause it cannot enter password. 
+
 ---
   
 I managed to make it worked, stable connection between two different machine in two different private network without VPN or NAT. (But currently I haven't make any command except 'exit', and the target_id were hard-coded for test)
